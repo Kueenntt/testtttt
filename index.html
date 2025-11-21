@@ -1,0 +1,123 @@
+<!DOCTYPE html><html><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hoops - Home</title>
+<style>
+body{margin:0;font-family:Arial;background:#111;color:#fff}
+nav{background:#000;padding:15px;text-align:center}
+nav a{color:#fff;margin:10px;text-decoration:none}
+nav a:hover{color:orange;transition:.3s}
+section{padding:30px}
+.logo{width:120px;animation:bounce 2s infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+img{width:100%;border-radius:10px;margin-top:20px}
+@media(max-width:600px){section{padding:15px}}
+</style>
+</head><body>
+
+<nav>
+ <a href="index.html">Home</a>
+ <a href="gallery.html">Gallery</a>
+ <a href="videos.html">Videos</a>
+ <a href="contact.html">Contact</a>
+</nav>
+
+<section>
+ <h1>Welcome to Hoops!</h1>
+ <img class="logo" src="https://cdn-icons-png.flaticon.com/512/861/861512.png">
+ <p>Your hub for basketball highlights, photos, and more.</p>
+ <img src="https://cdn.pixabay.com/photo/2016/11/21/15/53/basketball-1846141_1280.jpg">
+</section>
+
+</body></html>
+<!DOCTYPE html><html><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hoops - Gallery</title>
+<style>
+body{margin:0;font-family:Arial;background:#111;color:#fff}
+nav{background:#000;padding:15px;text-align:center}
+nav a{color:#fff;margin:10px;text-decoration:none}
+nav a:hover{color:orange}
+section{padding:30px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px}
+.grid img{width:100%;border-radius:10px;transition:.3s}
+.grid img:hover{transform:scale(1.05)}
+</style>
+</head><body>
+
+<nav>
+ <a href="index.html">Home</a>
+ <a href="gallery.html">Gallery</a>
+ <a href="videos.html">Videos</a>
+ <a href="contact.html">Contact</a>
+</nav>
+
+<section>
+ <h2>Gallery</h2>
+ <div class="grid">
+  <img src="https://cdn.pixabay.com/photo/2017/07/31/11/21/people-2557399_1280.jpg">
+  <img src="https://cdn.pixabay.com/photo/2016/12/13/23/09/basketball-1908742_1280.jpg">
+  <img src="https://cdn.pixabay.com/photo/2014/04/03/10/32/basketball-310913_1280.png">
+ </div>
+</section>
+
+</body></html>
+<!DOCTYPE html><html><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hoops - Videos</title>
+<style>
+body{margin:0;font-family:Arial;background:#111;color:#fff}
+nav{background:#000;padding:15px;text-align:center}
+nav a{color:#fff;margin:10px;text-decoration:none}
+nav a:hover{color:orange}
+section{padding:30px}
+iframe{width:100%;height:315px;border:0;border-radius:10px}
+</style>
+</head><body>
+
+<nav>
+ <a href="index.html">Home</a>
+ <a href="gallery.html">Gallery</a>
+ <a href="videos.html">Videos</a>
+ <a href="contact.html">Contact</a>
+</nav>
+
+<section>
+ <h2>Highlights</h2>
+ <p>Watch the best basketball plays!</p>
+ <iframe src="https://www.youtube.com/embed/0Ucx0jV9Zq4" allowfullscreen></iframe>
+</section>
+
+</body></html>
+<!DOCTYPE html><html><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hoops - Contact</title>
+<style>
+body{margin:0;font-family:Arial;background:#111;color:#fff}
+nav{background:#000;padding:15px;text-align:center}
+nav a{color:#fff;margin:10px;text-decoration:none}
+nav a:hover{color:orange}
+section{padding:30px}
+input,textarea{width:100%;padding:10px;margin:10px 0;border-radius:5px;border:0}
+button{padding:10px 20px;background:orange;border:0;cursor:pointer}
+button:hover{background:#ff9900}
+</style>
+</head><body>
+
+<nav>
+ <a href="index.html">Home</a>
+ <a href="gallery.html">Gallery</a>
+ <a href="videos.html">Videos</a>
+ <a href="contact.html">Contact</a>
+</nav>
+
+<section>
+ <h2>Contact Us</h2>
+ <form>
+  <input type="text" placeholder="Your Name">
+  <input type="email" placeholder="Email">
+  <textarea placeholder="Message"></textarea>
+  <button>Send</button>
+ </form>
+</section>
+
+</body></html>
