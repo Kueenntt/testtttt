@@ -1,123 +1,186 @@
-<!DOCTYPE html><html><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hoops - Home</title>
-<style>
-body{margin:0;font-family:Arial;background:#111;color:#fff}
-nav{background:#000;padding:15px;text-align:center}
-nav a{color:#fff;margin:10px;text-decoration:none}
-nav a:hover{color:orange;transition:.3s}
-section{padding:30px}
-.logo{width:120px;animation:bounce 2s infinite}
-@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-img{width:100%;border-radius:10px;margin-top:20px}
-@media(max-width:600px){section{padding:15px}}
-</style>
-</head><body>
+<!DOCTYPE html> <!-- Declares this is an HTML5 page -->
+<html lang="en"> <!-- Root element; language is English for accessibility -->
 
-<nav>
- <a href="index.html">Home</a>
- <a href="gallery.html">Gallery</a>
- <a href="videos.html">Videos</a>
- <a href="contact.html">Contact</a>
-</nav>
+<head> <!-- Head section: contains metadata, title, and CSS -->
+  <meta charset="UTF-8" /> <!-- Ensures letters, symbols, special characters display correctly -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!-- Makes page responsive on mobile/tablet/desktop -->
+  <title>My Basketball Website</title> <!-- Browser tab text -->
+  
+  <style> <!-- CSS starts here; controls appearance of elements -->
 
-<section>
- <h1>Welcome to Hoops!</h1>
- <img class="logo" src="https://cdn-icons-png.flaticon.com/512/861/861512.png">
- <p>Your hub for basketball highlights, photos, and more.</p>
- <img src="https://cdn.pixabay.com/photo/2016/11/21/15/53/basketball-1846141_1280.jpg">
-</section>
+    /* RESET DEFAULT STYLING */
+    * { 
+      margin: 0; /* Removes default spacing so layout is clean */
+      padding: 0; /* Removes default padding inside elements */
+      box-sizing: border-box; /* Width/height include padding and border for easier sizing */
+    }
 
-</body></html>
-<!DOCTYPE html><html><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hoops - Gallery</title>
-<style>
-body{margin:0;font-family:Arial;background:#111;color:#fff}
-nav{background:#000;padding:15px;text-align:center}
-nav a{color:#fff;margin:10px;text-decoration:none}
-nav a:hover{color:orange}
-section{padding:30px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px}
-.grid img{width:100%;border-radius:10px;transition:.3s}
-.grid img:hover{transform:scale(1.05)}
-</style>
-</head><body>
+    /* PAGE LAYOUT AND BASIC STYLING */
+    html, body { 
+      height: 100%; /* Allows sections to fill the full screen */
+      font-family: Arial, sans-serif; /* Default readable font */
+      background-color: black; /* Dark background for whole page */
+      color: white; /* Default text color for paragraphs/headings */
+      overflow: hidden; /* Hides default scroll; sections scroll individually */
+      scroll-behavior: smooth; /* Smooth scrolling when clicking nav links */
+    }
 
-<nav>
- <a href="index.html">Home</a>
- <a href="gallery.html">Gallery</a>
- <a href="videos.html">Videos</a>
- <a href="contact.html">Contact</a>
-</nav>
+    /* NAVIGATION MENU ON RIGHT */
+    nav { 
+      position: fixed; /* Menu stays visible even when scrolling content */
+      top: 50%; /* Vertically center menu */
+      right: 20px; /* Distance from right edge of screen */
+      transform: translateY(-50%); /* Perfect vertical centering */
+      display: flex; /* Flexible layout */
+      flex-direction: column; /* Stack links vertically */
+      z-index: 10; /* Menu appears on top of sections */
+    }
 
-<section>
- <h2>Gallery</h2>
- <div class="grid">
-  <img src="https://cdn.pixabay.com/photo/2017/07/31/11/21/people-2557399_1280.jpg">
-  <img src="https://cdn.pixabay.com/photo/2016/12/13/23/09/basketball-1908742_1280.jpg">
-  <img src="https://cdn.pixabay.com/photo/2014/04/03/10/32/basketball-310913_1280.png">
- </div>
-</section>
+    /* NAV MENU LINKS */
+    nav a { 
+      color: orange; /* Menu link text color; visible on black background */
+      text-decoration: none; /* Removes underline from links */
+      margin: 12px 0; /* Vertical space between links */
+      font-size: 22px; /* Large font for readability */
+      position: relative; /* Needed for animated underline effect */
+      transition: all 0.3s ease; /* Smooth effect for hover actions */
+    }
 
-</body></html>
-<!DOCTYPE html><html><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hoops - Videos</title>
-<style>
-body{margin:0;font-family:Arial;background:#111;color:#fff}
-nav{background:#000;padding:15px;text-align:center}
-nav a{color:#fff;margin:10px;text-decoration:none}
-nav a:hover{color:orange}
-section{padding:30px}
-iframe{width:100%;height:315px;border:0;border-radius:10px}
-</style>
-</head><body>
+    nav a:hover { 
+      color: white; /* Link turns white on hover; seen in right menu */
+      transform: translateX(-10px); /* Moves slightly left on hover */
+    }
 
-<nav>
- <a href="index.html">Home</a>
- <a href="gallery.html">Gallery</a>
- <a href="videos.html">Videos</a>
- <a href="contact.html">Contact</a>
-</nav>
+    nav a::after { 
+      content: ''; /* Creates small line element under link */
+      display: block; /* Makes line appear below link text */
+      height: 2px; /* Line thickness */
+      width: 0; /* Initially hidden */
+      background: orange; /* Line color matches link */
+      transition: width 0.3s; /* Smooth animation when line expands */
+    }
 
-<section>
- <h2>Highlights</h2>
- <p>Watch the best basketball plays!</p>
- <iframe src="https://www.youtube.com/embed/0Ucx0jV9Zq4" allowfullscreen></iframe>
-</section>
+    nav a:hover::after { 
+      width: 100%; /* Underline expands fully under text on hover; visible under menu links */
+    }
 
-</body></html>
-<!DOCTYPE html><html><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hoops - Contact</title>
-<style>
-body{margin:0;font-family:Arial;background:#111;color:#fff}
-nav{background:#000;padding:15px;text-align:center}
-nav a{color:#fff;margin:10px;text-decoration:none}
-nav a:hover{color:orange}
-section{padding:30px}
-input,textarea{width:100%;padding:10px;margin:10px 0;border-radius:5px;border:0}
-button{padding:10px 20px;background:orange;border:0;cursor:pointer}
-button:hover{background:#ff9900}
-</style>
-</head><body>
+    /* SECTIONS (FULL-SCREEN PANELS) */
+    .section { 
+      position: absolute; /* Sections stacked on top of each other */
+      top: 0; /* Align to top of viewport */
+      left: 0; /* Align to left edge */
+      width: 100%; /* Full width of screen */
+      height: 100%; /* Full height of screen */
+      padding: 80px 60px; /* Space inside section for content */
+      padding-right: 220px; /* Extra space for right menu */
+      background-color: #111; /* Dark gray section background */
+      opacity: 0; /* Hidden initially */
+      transform: scale(0.98); /* Slightly smaller for animation effect */
+      transition: all 0.7s ease; /* Smooth fade/zoom when section becomes visible */
+      overflow-y: auto; /* Section can scroll if content is taller than viewport */
+      display: flex; /* Flex layout for child elements */
+      flex-direction: column; /* Stack children vertically */
+      justify-content: flex-start; /* Align children at top */
+      align-items: flex-start; /* Align children to left */
+    }
 
-<nav>
- <a href="index.html">Home</a>
- <a href="gallery.html">Gallery</a>
- <a href="videos.html">Videos</a>
- <a href="contact.html">Contact</a>
-</nav>
+    .section:target { 
+      opacity: 1; /* Section becomes visible when clicked via nav menu */
+      transform: scale(1); /* Normal size */
+      z-index: 1; /* Brings active section on top */
+    }
 
-<section>
- <h2>Contact Us</h2>
- <form>
-  <input type="text" placeholder="Your Name">
-  <input type="email" placeholder="Email">
-  <textarea placeholder="Message"></textarea>
-  <button>Send</button>
- </form>
-</section>
+    #home { 
+      opacity: 1; /* Home section visible by default on page load */
+      transform: scale(1); /* Normal size */
+      z-index: 1; /* On top */
+    }
 
-</body></html>
+    body:has(:target:not(#home)) #home { 
+      opacity: 0; /* Home section hidden when another section is active */
+      z-index: 0; /* Sends home behind active section */
+    }
+
+    /* SECTION HEADINGS */
+    h2 { 
+      font-size: 3rem; /* Large heading text for visibility */
+      color: orange; /* Heading color visible on dark background */
+      margin-bottom: 20px; /* Space below heading */
+    }
+
+    /* PARAGRAPH TEXT */
+    p { 
+      font-size: 1.2rem; /* Comfortable reading size */
+      line-height: 1.6; /* Space between lines for readability */
+      margin-bottom: 20px; /* Space below paragraph */
+    }
+
+    /* IMAGES AND VIDEOS */
+    img, iframe { 
+      width: 500px; /* Fixed width on screen */
+      aspect-ratio: 16 / 9; /* Maintains standard video/photo ratio */
+      object-fit: cover; /* Crops image/video nicely if needed */
+      border: 2px solid orange; /* Orange border visible around media */
+      border-radius: 10px; /* Rounded corners for styling */
+      margin-bottom: 20px; /* Space below each media */
+      margin-left: 0; /* Aligns media to left */
+      display: block; /* Block-level element so it sits on its own line */
+      box-sizing: border-box; /* Includes border in size */
+      background: black; /* Background behind media */
+    }
+
+  </style> <!-- End of CSS -->
+
+</head>
+
+<body> <!-- Visible content starts -->
+
+  <!-- NAVIGATION MENU -->
+  <nav> <!-- Right-side vertical menu, visible at all times -->
+    <a href="#home">Home</a> <!-- Right menu link visible on screen; scrolls to Home section -->
+    <a href="#game">The Game</a> <!-- Right menu link; scrolls to Game section -->
+    <a href="#players">Players</a> <!-- Right menu link; scrolls to Players section -->
+    <a href="#about">About Me</a> <!-- Right menu link; scrolls to About section -->
+  </nav>
+
+  <!-- HOME SECTION -->
+  <div class="section" id="home"> <!-- Full-screen section visible by default -->
+    <h2>Home</h2> <!-- Section heading at top-left -->
+    <p>
+      Welcome to my basketball website, a place built for everyone passionate about the game...
+    </p> <!-- Paragraph below heading visible in Home section -->
+    <img src="https://upload.wikimedia.org/wikipedia/commons/0/06/Steph_Curry_%2851915116957%29.jpg" alt="Basketball players dribbling court" />
+    <!-- Image visible below paragraph: basketball players, orange border, rounded corners -->
+    <p>
+      Basketball is a sport where strategy, skill, and athleticism blend together...
+    </p> <!-- Paragraph below image -->
+    <iframe src="https://www.youtube.com/embed/aSqeWUuQSlM?si=odJtxF2pAJmzHICD" allowfullscreen></iframe>
+    <!-- Video below paragraph: same size and style as image -->
+    <p>
+      Beyond its rules and competitive nature, basketball is a vibrant culture...
+    </p> <!-- Paragraph below video -->
+  </div>
+
+  <!-- GAME SECTION -->
+  <div class="section" id="game"> <!-- Full-screen section about basketball gameplay -->
+    <h2>The Game</h2> <!-- Heading at top-left -->
+    <p>
+      The game of basketball is fast, dynamic, and full of drama...
+    </p> <!-- Paragraph explaining the game -->
+    <img src="https://i.pinimg.com/1200x/97/43/65/97436528eb8a81edee771e162d105b7d.jpg" alt="Basketball hoop in a park" />
+    <!-- Image visible under paragraph: basketball hoop, orange border -->
+    <p>
+      To excel in basketball, players rely on fundamental skills...
+    </p> <!-- Paragraph under image about skills -->
+    <iframe src="https://www.youtube.com/embed/cpaK9KyyRZ8" allowfullscreen></iframe>
+    <!-- Video under paragraph demonstrating gameplay -->
+    <p>
+      Basketball is not just physically demanding—it challenges players to think quickly...
+    </p> <!-- Paragraph under video -->
+  </div>
+
+  <!-- PLAYERS SECTION -->
+  <div class="section" id="players"> <!-- Full-screen section about players -->
+    <h2>Players</h2> <!-- Heading at top-left -->
+    <p>
+      Basketball players bring diversity and excitement to
