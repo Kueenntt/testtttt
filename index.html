@@ -23,6 +23,7 @@ body {
     background: var(--dark);
     color: #fff;
     overflow-x: hidden;
+    transition: background 0.5s ease;
 }
 
 /* NAVBAR */
@@ -38,6 +39,7 @@ nav {
     align-items: center;
     z-index: 100;
     border-bottom: 1px solid rgba(255,255,255,0.08);
+    animation: slideDown 1s ease forwards;
 }
 
 nav h1 {
@@ -57,33 +59,58 @@ nav li:hover { color:var(--gold); }
 nav li:hover::after { width:100%; }
 
 /* HERO */
-.hero { padding: 220px 50px 100px; text-align:center; background: linear-gradient(to bottom,#111,#000);}
+.hero { padding: 220px 50px 100px; text-align:center; background: linear-gradient(to bottom,#111,#000); animation: fadeIn 1s ease forwards;}
 .main-title { font-size:55px; font-weight:700; color:var(--gold); margin-bottom:0; letter-spacing:1.5px; animation: fadeSlideDown 1.2s ease forwards;}
 .sub-title { font-size:22px; font-weight:500; color:var(--gold); margin-top:5px; margin-bottom:25px; letter-spacing:6px; animation: fadeSlideDown 1.4s ease forwards;}
 .hero p { font-size:20px; max-width:800px; margin:0 auto; color:#ccc; animation: fadeIn 1.5s ease forwards; }
 
 /* PAGES */
-.page { display:none; padding:140px 50px; min-height:100vh; }
-.active { display:block; }
+.page {
+    display:none;
+    padding:140px 50px;
+    min-height:100vh;
+    opacity:0;
+    transform:translateY(50px);
+    transition: all 0.6s ease;
+}
+.page.active {
+    display:block;
+    opacity:1;
+    transform:translateY(0);
+}
 .page-title { text-align:center; color:var(--gold); font-size:40px; margin-bottom:25px; }
 
-/* TRAVEL PLAN BUTTONS */
-.plan-buttons { display:flex; flex-direction:column; align-items:center; gap:30px; margin-bottom:40px; }
+/* TRAVEL PLAN BUTTONS (Collage style) */
+.plan-buttons {
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 30px;
+    justify-items: center;
+    margin-bottom:40px;
+}
 .plan-btn {
-    width: 350px;
-    padding: 25px 0;
+    width: 100%;
+    padding: 50px 20px;
     background: var(--gold);
     color: #000;
     border:none;
     border-radius: 15px;
-    font-size:22px;
+    font-size:20px;
     font-weight:700;
     cursor:pointer;
-    transition:0.3s;
+    transition:0.4s;
     text-align:center;
-    box-shadow: 0 8px 25px rgba(212,175,55,0.4);
+    box-shadow: 0 8px 20px rgba(212,175,55,0.4);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-transform: uppercase;
 }
-.plan-btn:hover { background:#f5d76e; transform:scale(1.05); box-shadow:0 12px 35px rgba(212,175,55,0.6); }
+.plan-btn:hover {
+    background: #f5d76e;
+    transform: scale(1.05) translateY(-5px);
+    box-shadow: 0 15px 35px rgba(212,175,55,0.6);
+}
 
 /* CARDS */
 .card { background:var(--card-bg); border:1px solid var(--card-border); padding:30px; border-radius:16px; margin:25px auto; max-width:650px; box-shadow:0 10px 30px rgba(0,0,0,0.4); backdrop-filter: blur(12px); transition:0.4s ease; transform:translateY(20px); opacity:0; animation:fadeSlideUp 1s forwards; }
@@ -91,11 +118,6 @@ nav li:hover::after { width:100%; }
 .price { font-size:30px; color:var(--gold); margin-top:15px; font-weight:600; }
 .book-btn { margin-top:20px; padding:12px 25px; background:var(--gold); color:#000; border:none; border-radius:8px; font-size:16px; font-weight:600; cursor:pointer; transition:0.3s; }
 .book-btn:hover { background:#f5d76e; transform:scale(1.05); }
-
-/* BOOK OPTIONS */
-.book-options { display:flex; flex-direction:column; align-items:center; margin-top:50px; }
-.contact-btn { padding:15px 35px; background:var(--gold); color:#000; border:none; border-radius:10px; margin:15px 0; font-size:20px; cursor:pointer; font-weight:600; transition:0.3s; }
-.contact-btn:hover { background:#f7dd85; transform:scale(1.07); }
 
 /* FOOTER */
 footer { background:#111; padding:40px 50px; text-align:center; border-top:1px solid #333; }
@@ -106,6 +128,7 @@ footer p { color:#ccc; }
 @keyframes fadeIn { from {opacity:0;} to{opacity:1;} }
 @keyframes fadeSlideUp { from {opacity:0; transform:translateY(40px);} to{opacity:1; transform:translateY(0);} }
 @keyframes fadeSlideDown { from {opacity:0; transform:translateY(-40px);} to{opacity:1; transform:translateY(0);} }
+@keyframes slideDown { from {transform:translateY(-100px);} to{transform:translateY(0);} }
 
 </style>
 </head>
@@ -159,10 +182,10 @@ footer p { color:#ccc; }
 </footer>
 
 <script>
-// Show page by ID
 function showPage(id) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
+    const page = document.getElementById(id);
+    page.classList.add('active');
 }
 </script>
 
