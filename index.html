@@ -1,186 +1,315 @@
-<!DOCTYPE html> <!-- Declares this is an HTML5 page -->
-<html lang="en"> <!-- Root element; language is English for accessibility -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Orchard Travels | Curated Journeys</title>
+    <!-- Tailwind CSS for utility-first styling --><script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Inter:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Custom CSS for fonts and absolute dark theme */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0c0c0c; /* Deep charcoal */
+            color: #f5f5f5; /* Near-white text for ultimate contrast */
+        }
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+        }
+        /* Rich Gold/Bronze color for professional accent */
+        .accent-gold {
+            color: #d4af37; /* Brighter, more luxurious gold */
+        }
+        /* Active Navigation Indicator */
+        .nav-link.active {
+            color: #d4af37;
+            border-bottom: 3px solid #d4af37;
+            padding-bottom: 5px;
+            font-weight: 700;
+        }
+        /* Card Hover Effect: Increased lift and a shadow that glows */
+        .travel-card {
+            transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.5s ease;
+        }
+        .travel-card:hover {
+            transform: translateY(-15px); /* More dramatic lift */
+            box-shadow: 0 40px 60px rgba(212, 175, 55, 0.15); /* Gold glow shadow */
+        }
+        
+        /* ADJUSTMENT: Home page hero overlay is slightly lighter (0.65 opacity) */
+        .hero-overlay {
+            background-color: rgba(10, 40, 20, 0.65); /* Less dark Forest Green overlay */
+            border-radius: 1rem;
+        }
+        /* Hero text styling for impact */
+        .hero-text-shadow {
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.4), 0 0 20px rgba(0, 0, 0, 0.6);
+        }
 
-<head> <!-- Head section: contains metadata, title, and CSS -->
-  <meta charset="UTF-8" /> <!-- Ensures letters, symbols, special characters display correctly -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!-- Makes page responsive on mobile/tablet/desktop -->
-  <title>My Basketball Website</title> <!-- Browser tab text -->
-  
-  <style> <!-- CSS starts here; controls appearance of elements -->
+        /* --- PAGE TRANSITION CSS FOR SMOOTH SWITCHING --- */
+        .page-exit-active {
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s ease-in, transform 0.3s ease-in;
+        }
+        .page-enter-active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.5s ease-out 0.1s, transform 0.5s ease-out 0.1s; /* Slight delay on enter */
+        }
+        .page-initial {
+            opacity: 0;
+            transform: translateY(20px);
+        }
 
-    /* RESET DEFAULT STYLING */
-    * { 
-      margin: 0; /* Removes default spacing so layout is clean */
-      padding: 0; /* Removes default padding inside elements */
-      box-sizing: border-box; /* Width/height include padding and border for easier sizing */
-    }
-
-    /* PAGE LAYOUT AND BASIC STYLING */
-    html, body { 
-      height: 100%; /* Allows sections to fill the full screen */
-      font-family: Arial, sans-serif; /* Default readable font */
-      background-color: black; /* Dark background for whole page */
-      color: white; /* Default text color for paragraphs/headings */
-      overflow: hidden; /* Hides default scroll; sections scroll individually */
-      scroll-behavior: smooth; /* Smooth scrolling when clicking nav links */
-    }
-
-    /* NAVIGATION MENU ON RIGHT */
-    nav { 
-      position: fixed; /* Menu stays visible even when scrolling content */
-      top: 50%; /* Vertically center menu */
-      right: 20px; /* Distance from right edge of screen */
-      transform: translateY(-50%); /* Perfect vertical centering */
-      display: flex; /* Flexible layout */
-      flex-direction: column; /* Stack links vertically */
-      z-index: 10; /* Menu appears on top of sections */
-    }
-
-    /* NAV MENU LINKS */
-    nav a { 
-      color: orange; /* Menu link text color; visible on black background */
-      text-decoration: none; /* Removes underline from links */
-      margin: 12px 0; /* Vertical space between links */
-      font-size: 22px; /* Large font for readability */
-      position: relative; /* Needed for animated underline effect */
-      transition: all 0.3s ease; /* Smooth effect for hover actions */
-    }
-
-    nav a:hover { 
-      color: white; /* Link turns white on hover; seen in right menu */
-      transform: translateX(-10px); /* Moves slightly left on hover */
-    }
-
-    nav a::after { 
-      content: ''; /* Creates small line element under link */
-      display: block; /* Makes line appear below link text */
-      height: 2px; /* Line thickness */
-      width: 0; /* Initially hidden */
-      background: orange; /* Line color matches link */
-      transition: width 0.3s; /* Smooth animation when line expands */
-    }
-
-    nav a:hover::after { 
-      width: 100%; /* Underline expands fully under text on hover; visible under menu links */
-    }
-
-    /* SECTIONS (FULL-SCREEN PANELS) */
-    .section { 
-      position: absolute; /* Sections stacked on top of each other */
-      top: 0; /* Align to top of viewport */
-      left: 0; /* Align to left edge */
-      width: 100%; /* Full width of screen */
-      height: 100%; /* Full height of screen */
-      padding: 80px 60px; /* Space inside section for content */
-      padding-right: 220px; /* Extra space for right menu */
-      background-color: #111; /* Dark gray section background */
-      opacity: 0; /* Hidden initially */
-      transform: scale(0.98); /* Slightly smaller for animation effect */
-      transition: all 0.7s ease; /* Smooth fade/zoom when section becomes visible */
-      overflow-y: auto; /* Section can scroll if content is taller than viewport */
-      display: flex; /* Flex layout for child elements */
-      flex-direction: column; /* Stack children vertically */
-      justify-content: flex-start; /* Align children at top */
-      align-items: flex-start; /* Align children to left */
-    }
-
-    .section:target { 
-      opacity: 1; /* Section becomes visible when clicked via nav menu */
-      transform: scale(1); /* Normal size */
-      z-index: 1; /* Brings active section on top */
-    }
-
-    #home { 
-      opacity: 1; /* Home section visible by default on page load */
-      transform: scale(1); /* Normal size */
-      z-index: 1; /* On top */
-    }
-
-    body:has(:target:not(#home)) #home { 
-      opacity: 0; /* Home section hidden when another section is active */
-      z-index: 0; /* Sends home behind active section */
-    }
-
-    /* SECTION HEADINGS */
-    h2 { 
-      font-size: 3rem; /* Large heading text for visibility */
-      color: orange; /* Heading color visible on dark background */
-      margin-bottom: 20px; /* Space below heading */
-    }
-
-    /* PARAGRAPH TEXT */
-    p { 
-      font-size: 1.2rem; /* Comfortable reading size */
-      line-height: 1.6; /* Space between lines for readability */
-      margin-bottom: 20px; /* Space below paragraph */
-    }
-
-    /* IMAGES AND VIDEOS */
-    img, iframe { 
-      width: 500px; /* Fixed width on screen */
-      aspect-ratio: 16 / 9; /* Maintains standard video/photo ratio */
-      object-fit: cover; /* Crops image/video nicely if needed */
-      border: 2px solid orange; /* Orange border visible around media */
-      border-radius: 10px; /* Rounded corners for styling */
-      margin-bottom: 20px; /* Space below each media */
-      margin-left: 0; /* Aligns media to left */
-      display: block; /* Block-level element so it sits on its own line */
-      box-sizing: border-box; /* Includes border in size */
-      background: black; /* Background behind media */
-    }
-
-  </style> <!-- End of CSS -->
-
+        /* Logo styling */
+        .logo-filter {
+            filter: brightness(1.2) sepia(0.3) hue-rotate(20deg) saturate(1.5); /* Gives a slight golden/green tint */
+        }
+    </style>
 </head>
+<body class="pt-24">
 
-<body> <!-- Visible content starts -->
+    <!-- NAVIGATION BAR (Fixed, professional dark bar) --><nav class="fixed top-0 w-full bg-[#111111] shadow-2xl z-50 py-5 border-b border-[#222222]">
+        <div class="max-w-7xl mx-auto flex justify-between items-center px-6">
+            <!-- Logo replaced text --><a href="#home" class="flex items-center space-x-3">
+                <img src="https://assets.website-files.com/5ffc279c09440306c4b266ae/600570894042875b4260a9f0_The-Orchard-logos-white.png" alt="The Orchard Travels Logo" class="h-12 w-auto logo-filter">
+            </a>
+            <ul class="flex space-x-12">
+                <li><a href="#home" class="nav-link text-gray-300 hover:text-white font-semibold transition-colors duration-300 tracking-wider text-lg">Home</a></li>
+                <li><a href="#plans" class="nav-link text-gray-300 hover:text-white font-semibold transition-colors duration-300 tracking-wider text-lg">Travel Plans</a></li>
+                <li><a href="#contact" class="nav-link text-gray-300 hover:text-white font-semibold transition-colors duration-300 tracking-wider text-lg">Contact Us</a></li>
+            </ul>
+        </div>
+    </nav>
 
-  <!-- NAVIGATION MENU -->
-  <nav> <!-- Right-side vertical menu, visible at all times -->
-    <a href="#home">Home</a> <!-- Right menu link visible on screen; scrolls to Home section -->
-    <a href="#game">The Game</a> <!-- Right menu link; scrolls to Game section -->
-    <a href="#players">Players</a> <!-- Right menu link; scrolls to Players section -->
-    <a href="#about">About Me</a> <!-- Right menu link; scrolls to About section -->
-  </nav>
+    <!-- MAIN CONTENT CONTAINER (This is where the "pages" will load) --><main id="app-content" class="min-h-screen pt-4 page-initial"></main>
 
-  <!-- HOME SECTION -->
-  <div class="section" id="home"> <!-- Full-screen section visible by default -->
-    <h2>Home</h2> <!-- Section heading at top-left -->
-    <p>
-      Welcome to my basketball website, a place built for everyone passionate about the game...
-    </p> <!-- Paragraph below heading visible in Home section -->
-    <img src="https://upload.wikimedia.org/wikipedia/commons/0/06/Steph_Curry_%2851915116957%29.jpg" alt="Basketball players dribbling court" />
-    <!-- Image visible below paragraph: basketball players, orange border, rounded corners -->
-    <p>
-      Basketball is a sport where strategy, skill, and athleticism blend together...
-    </p> <!-- Paragraph below image -->
-    <iframe src="https://www.youtube.com/embed/aSqeWUuQSlM?si=odJtxF2pAJmzHICD" allowfullscreen></iframe>
-    <!-- Video below paragraph: same size and style as image -->
-    <p>
-      Beyond its rules and competitive nature, basketball is a vibrant culture...
-    </p> <!-- Paragraph below video -->
-  </div>
+    <!-- Footer --><footer class="bg-[#111111] text-gray-500 py-12 mt-20 text-center border-t border-gray-900 shadow-inner">
+        <p class="text-base font-light tracking-wider">&copy; 2024 The Orchard Travels. Curating the world's finest, bespoke journeys.</p>
+        <div class="mt-4 flex justify-center space-x-6 text-xl">
+             <!-- Updated Social Media Links --><a href="#" class="hover:text-green-500 transition-colors" title="WhatsApp">💬</a>
+             <a href="#" class="hover:text-green-500 transition-colors" title="TikTok">🎶</a>
+             <a href="#" class="hover:text-green-500 transition-colors" title="Instagram">📸</a>
+        </div>
+    </footer>
 
-  <!-- GAME SECTION -->
-  <div class="section" id="game"> <!-- Full-screen section about basketball gameplay -->
-    <h2>The Game</h2> <!-- Heading at top-left -->
-    <p>
-      The game of basketball is fast, dynamic, and full of drama...
-    </p> <!-- Paragraph explaining the game -->
-    <img src="https://i.pinimg.com/1200x/97/43/65/97436528eb8a81edee771e162d105b7d.jpg" alt="Basketball hoop in a park" />
-    <!-- Image visible under paragraph: basketball hoop, orange border -->
-    <p>
-      To excel in basketball, players rely on fundamental skills...
-    </p> <!-- Paragraph under image about skills -->
-    <iframe src="https://www.youtube.com/embed/cpaK9KyyRZ8" allowfullscreen></iframe>
-    <!-- Video under paragraph demonstrating gameplay -->
-    <p>
-      Basketball is not just physically demanding—it challenges players to think quickly...
-    </p> <!-- Paragraph under video -->
-  </div>
+<script>
+    // --- JAVASCRIPT FOR SINGLE-PAGE APPLICATION ROUTING ---
+    const appContent = document.getElementById('app-content');
+    const navLinks = document.querySelectorAll('.nav-link');
 
-  <!-- PLAYERS SECTION -->
-  <div class="section" id="players"> <!-- Full-screen section about players -->
-    <h2>Players</h2> <!-- Heading at top-left -->
-    <p>
-      Basketball players bring diversity and excitement to
+    // 1. Home Page Content
+    const getHomePage = () => `
+        <section id="home-page" class="relative bg-cover bg-center h-[95vh] flex items-center justify-center text-white mx-auto max-w-7xl rounded-2xl overflow-hidden shadow-2xl shadow-green-900/40" 
+             style="background-image: url('https://images.unsplash.com/photo-1543884841-8b2b7314d59f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80');">
+            <div class="absolute inset-0 hero-overlay"></div>
+            <div class="relative z-10 text-center p-16 max-w-5xl border border-green-500/50 rounded-lg shadow-2xl backdrop-blur-md">
+                <!-- Professional Title Alignment --><p class="text-2xl font-semibold text-green-400 uppercase tracking-[0.3em] mb-6 hero-text-shadow">Experience The Grandeur</p>
+                
+                <!-- Combined Title as requested: The Orchard Travels in one line, Bhutan smaller --><h1 class="text-7xl md:text-[6rem] font-black tracking-tighter leading-none text-white hero-text-shadow mb-8">
+                    The Orchard Travels &nbsp;<span class="text-5xl md:text-7xl font-bold accent-gold">Bhutan</span>
+                </h1>
+                
+                <!-- Professional Divider --><div class="h-1 bg-green-500 w-40 mx-auto mb-8 opacity-70"></div>
+                <p class="text-3xl mb-12 text-gray-300 font-light italic">
+                    "Crafting unforgettable journeys to the Kingdom of the Thunder Dragon."
+                </p>
+                <a href="#plans" class="bg-green-700 hover:bg-green-800 text-white font-extrabold py-5 px-16 rounded-full text-2xl shadow-xl transition duration-300 ease-in-out transform hover:scale-105 uppercase tracking-widest border border-green-500/50">
+                    View Bhutan Packages
+                </a>
+            </div>
+        </section>
+        
+        <div class="max-w-7xl mx-auto mt-24 p-6">
+            <h2 class="text-6xl font-black text-center text-green-500 mb-6">Our Commitment</h2>
+            <p class="text-xl text-center text-gray-500 mb-20">We deliver peace of mind and unparalleled quality in every detail.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+                <div class="p-10 bg-[#0d0d0d] rounded-xl shadow-2xl border border-gray-800/80 transition duration-300 hover:shadow-green-900/60">
+                    <div class="text-6xl accent-gold mb-4">👑</div>
+                    <h3 class="text-3xl font-bold text-white mb-2">Unrivaled Luxury</h3>
+                    <p class="text-gray-400 mt-3 text-base">Access to the world's most exclusive resorts and private transport options.</p>
+                </div>
+                <div class="p-10 bg-[#0d0d0d] rounded-xl shadow-2xl border border-gray-800/80 transition duration-300 hover:shadow-green-900/60">
+                    <div class="text-6xl accent-gold mb-4">🏔️</div>
+                    <h3 class="text-3xl font-bold text-white mb-2">Authentic Discovery</h3>
+                    <p class="text-gray-400 mt-3 text-base">Curated cultural programs and off-the-beaten-path expeditions with expert guides.</p>
+                </div>
+                <div class="p-10 bg-[#0d0d0d] rounded-xl shadow-2xl border border-gray-800/80 transition duration-300 hover:shadow-green-900/60">
+                    <div class="text-6xl accent-gold mb-4">🛡️</div>
+                    <h3 class="text-3xl font-bold text-white mb-2">Discreet Service</h3>
+                    <p class="text-gray-400 mt-3 text-base">Your dedicated concierge ensures absolute privacy and flawless execution, globally.</p>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // 2. Travel Plans Page Content
+    const getPlansPage = () => `
+        <section id="plans-page" class="py-16 max-w-7xl mx-auto px-6">
+            <h2 class="text-6xl font-black text-center text-green-500 mb-6">Our Exclusive Portfolio</h2>
+            <p class="text-xl text-center text-gray-400 mb-20">Select the tier of service that aligns with your travel vision.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+
+                <!-- Silver Package (Refined Special) -->${createTravelCard('Silver Package', 'Boutique hotel stays and flexible, short European and domestic excursions.', 'https://images.unsplash.com/photo-1542052136-8d5c7017282b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60', 'bg-gray-700/80', 'text-gray-200')}
+                
+                <!-- Diamond Package (Gold Accent) -->${createTravelCard('Diamond Package', 'The zenith of luxury: private charters, exclusive villas, and bespoke dining.', 'https://images.unsplash.com/photo-1520250497591-ab3f2f396435?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60', 'bg-yellow-900/80', 'accent-gold')}
+
+                <!-- Platinum Package (Green Accent) -->${createTravelCard('Platinum Package', 'Comprehensive world tours, professional photography, and complex, multi-destination itineraries.', 'https://images.unsplash.com/photo-1498050108023-c5249f4cd085?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60', 'bg-green-900/80', 'text-green-300')}
+
+                <!-- Imperial Package (Refined Gold) -->${createTravelCard('Imperial Package', 'Family legacies, milestone celebrations, and highly personalized cultural retreats.', 'https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60', 'bg-indigo-900/80', 'text-indigo-300')}
+            </div>
+            <div class="text-center mt-20">
+                <p class="text-2xl text-gray-400 mb-4">Ready to embark on a journey designed for you?</p>
+                <a href="#contact" class="text-2xl font-bold accent-gold hover:text-white transition-colors duration-300 border-b-2 border-green-500 pb-1 uppercase tracking-wider">Request a Confidential Consultation &rarr;</a>
+            </div>
+        </section>
+    `;
+
+    // Function to generate the HTML for a single travel card (for simplicity)
+    function createTravelCard(title, description, imgUrl, overlayClass, accentTextClass) {
+        return `
+            <a href="#" class="travel-card block rounded-xl overflow-hidden shadow-2xl relative group cursor-pointer bg-[#0d0d0d] border border-gray-900">
+                <img src="${imgUrl}" alt="${title}" class="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 ${overlayClass} opacity-95 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div class="absolute bottom-0 left-0 p-8 text-white text-left z-10">
+                    <h3 class="text-5xl font-extrabold mb-3 ${accentTextClass}">${title}</h3>
+                    <p class="text-base font-light opacity-90 text-gray-300 leading-relaxed">${description}</p>
+                    <span class="inline-block mt-4 text-sm font-bold tracking-widest uppercase border-b border-green-500/80 ${accentTextClass} hover:border-white">View Details &rarr;</span>
+                </div>
+            </a>
+        `;
+    }
+
+    // 3. Contact Us Page Content
+    const getContactPage = () => `
+        <section id="contact-page" class="py-16 max-w-5xl mx-auto px-6">
+            <h2 class="text-6xl font-black text-center text-green-500 mb-6">Arrange Your Private Consultation</h2>
+            <p class="text-xl text-center text-gray-400 mb-20">Connect directly with our senior travel strategists to begin planning your bespoke itinerary.</p>
+
+            <div class="bg-[#0d0d0d] p-12 rounded-2xl shadow-2xl border border-gray-800/80 text-white transition duration-500 hover:shadow-green-900/60">
+                <form class="space-y-10">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <label for="name" class="block text-lg font-bold text-gray-300 mb-3 uppercase tracking-widest">Full Name</label>
+                            <input type="text" id="name" placeholder="Mr. or Mrs. Traveller" class="w-full p-4 border border-gray-700 bg-gray-900 text-white rounded-lg focus:ring-green-500 focus:border-green-500 transition shadow-inner" required>
+                        </div>
+                        <div>
+                            <label for="email" class="block text-lg font-bold text-gray-300 mb-3 uppercase tracking-widest">Email Address</label>
+                            <input type="email" id="email" placeholder="confidential@mail.com" class="w-full p-4 border border-gray-700 bg-gray-900 text-white rounded-lg focus:ring-green-500 focus:border-green-500 transition shadow-inner" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="interest" class="block text-lg font-bold text-gray-300 mb-3 uppercase tracking-widest">Preferred Service Level</label>
+                        <select id="interest" class="w-full p-4 border border-gray-700 bg-gray-900 text-white rounded-lg focus:ring-green-500 focus:border-green-500 transition shadow-inner">
+                            <option class="bg-gray-900 accent-gold">Diamond Package (Ultra-Luxury)</option>
+                            <option class="bg-gray-900">Platinum Package (Comprehensive Tours)</option>
+                            <option class="bg-gray-900">Imperial Package (Family/Milestone)</option>
+                            <option class="bg-gray-900">Silver Package (Boutique Getaway)</option>
+                            <option class="bg-gray-900">General Inquiry</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="message" class="block text-lg font-bold text-gray-300 mb-3 uppercase tracking-widest">Consultation Details</label>
+                        <textarea id="message" rows="6" placeholder="Please mention your desired destination, approximate travel dates, and any specific preferences." class="w-full p-4 border border-gray-700 bg-gray-900 text-white rounded-lg focus:ring-green-500 focus:border-green-500 transition shadow-inner" required></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-extrabold py-5 rounded-lg shadow-xl transition duration-300 uppercase tracking-[0.2em] text-xl border-b-4 border-green-800">
+                        Submit Confidential Request
+                    </button>
+                    <!-- Small message box instead of alert() --><div id="message-box" class="hidden mt-8 p-4 bg-green-950 text-green-300 rounded-lg font-medium text-center border border-green-700 shadow-lg"></div>
+                </form>
+            </div>
+        </section>
+    `;
+
+    // --- ROUTING LOGIC ---
+
+    // Define the routes mapping hash to content function
+    const routes = {
+        '': getHomePage, // Default route
+        'home': getHomePage,
+        'plans': getPlansPage,
+        'contact': getContactPage
+    };
+
+    // Function to load content based on the URL hash
+    function navigate() {
+        // Get hash (e.g., '#plans') and remove the '#'
+        let hash = window.location.hash.substring(1).toLowerCase() || 'home';
+        const contentFunction = routes[hash] || routes['home'];
+
+        // 1. Start exit transition by adding the exit class
+        appContent.classList.remove('page-enter-active');
+        appContent.classList.add('page-exit-active');
+        
+        // Use a slight delay (300ms) to allow the content to fade out
+        setTimeout(() => {
+            // 2. Load the new content
+            appContent.innerHTML = contentFunction();
+            updateActiveNav(hash);
+
+            // 3. Start enter transition by removing the exit class and adding the enter class
+            appContent.classList.remove('page-exit-active', 'page-initial');
+            appContent.classList.add('page-enter-active');
+
+            // Re-attach form listener
+            if(hash === 'contact') {
+                attachContactFormListener();
+            }
+        }, 300); // Must match the exit transition duration in CSS
+    }
+
+    // Function to update the active class on the navigation links
+    function updateActiveNav(currentHash) {
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            // Check if the link's hash matches the current route
+            if (link.getAttribute('href').substring(1) === currentHash) {
+                link.classList.add('active');
+            }
+        });
+    }
+
+    // Function to attach the form submission listener
+    function attachContactFormListener() {
+        const contactForm = document.querySelector('#contact-page form');
+        if(contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const msgBox = document.getElementById('message-box');
+                
+                // Simulate success
+                msgBox.innerHTML = 'Thank you. Your request has been received. A senior specialist will contact you shortly.';
+                msgBox.classList.remove('hidden');
+                
+                // Reset form fields
+                this.reset();
+            });
+        }
+    }
+
+    // Event listener for when the URL hash changes (when a link is clicked)
+    window.addEventListener('hashchange', navigate);
+
+    // Initial load: Navigate to the correct page when the site loads
+    window.addEventListener('load', () => {
+        // For the very first load, we bypass the exit transition and just trigger the entrance
+        let hash = window.location.hash.substring(1).toLowerCase() || 'home';
+        const contentFunction = routes[hash] || routes['home'];
+        
+        appContent.innerHTML = contentFunction();
+        updateActiveNav(hash);
+        
+        // Immediately start the fade-in effect on initial load
+        appContent.classList.remove('page-initial');
+        appContent.classList.add('page-enter-active');
+
+        if(hash === 'contact') {
+            attachContactFormListener();
+        }
+    });
+
+</script>
+</body>
+</html>
