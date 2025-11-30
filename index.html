@@ -59,7 +59,7 @@ nav li:hover { color:var(--gold); }
 nav li:hover::after { width:100%; }
 
 /* HERO */
-.hero { padding: 220px 50px 100px; text-align:center; background: linear-gradient(to bottom,#111,#000); animation: fadeIn 1s ease forwards;}
+.hero { padding:220px 50px 100px; text-align:center; background: linear-gradient(to bottom,#111,#000); animation: fadeIn 1s ease forwards;}
 .main-title { font-size:55px; font-weight:700; color:var(--gold); margin-bottom:0; letter-spacing:1.5px; animation: fadeSlideDown 1.2s ease forwards;}
 .sub-title { font-size:22px; font-weight:500; color:var(--gold); margin-top:5px; margin-bottom:25px; letter-spacing:6px; animation: fadeSlideDown 1.4s ease forwards;}
 .hero p { font-size:20px; max-width:800px; margin:0 auto; color:#ccc; animation: fadeIn 1.5s ease forwards; }
@@ -67,7 +67,7 @@ nav li:hover::after { width:100%; }
 /* PAGES */
 .page {
     display:none;
-    padding:140px 50px;
+    padding:180px 50px 100px; /* extra top padding for nav */
     min-height:100vh;
     opacity:0;
     transform:translateY(50px);
@@ -78,29 +78,29 @@ nav li:hover::after { width:100%; }
     opacity:1;
     transform:translateY(0);
 }
-.page-title { text-align:center; color:var(--gold); font-size:40px; margin-bottom:25px; }
+.page-title { text-align:center; color:var(--gold); font-size:42px; margin-bottom:35px; }
 
-/* TRAVEL PLAN BUTTONS (Collage style) */
+/* TRAVEL PLAN BUTTONS (Collage/Grid) */
 .plan-buttons {
     display:grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 35px;
     justify-items: center;
-    margin-bottom:40px;
+    margin-bottom:50px;
 }
 .plan-btn {
     width: 100%;
-    padding: 50px 20px;
+    padding: 70px 20px;
     background: var(--gold);
     color: #000;
     border:none;
-    border-radius: 15px;
-    font-size:20px;
+    border-radius: 20px;
+    font-size:24px;
     font-weight:700;
     cursor:pointer;
-    transition:0.4s;
+    transition:0.5s;
     text-align:center;
-    box-shadow: 0 8px 20px rgba(212,175,55,0.4);
+    box-shadow: 0 10px 25px rgba(212,175,55,0.4);
     display:flex;
     align-items:center;
     justify-content:center;
@@ -108,20 +108,13 @@ nav li:hover::after { width:100%; }
 }
 .plan-btn:hover {
     background: #f5d76e;
-    transform: scale(1.05) translateY(-5px);
-    box-shadow: 0 15px 35px rgba(212,175,55,0.6);
+    transform: scale(1.07) translateY(-7px);
+    box-shadow: 0 18px 40px rgba(212,175,55,0.6);
 }
 
-/* CARDS */
-.card { background:var(--card-bg); border:1px solid var(--card-border); padding:30px; border-radius:16px; margin:25px auto; max-width:650px; box-shadow:0 10px 30px rgba(0,0,0,0.4); backdrop-filter: blur(12px); transition:0.4s ease; transform:translateY(20px); opacity:0; animation:fadeSlideUp 1s forwards; }
-.card h3 { font-size:26px; margin-bottom:10px; color:var(--gold);}
-.price { font-size:30px; color:var(--gold); margin-top:15px; font-weight:600; }
-.book-btn { margin-top:20px; padding:12px 25px; background:var(--gold); color:#000; border:none; border-radius:8px; font-size:16px; font-weight:600; cursor:pointer; transition:0.3s; }
-.book-btn:hover { background:#f5d76e; transform:scale(1.05); }
-
 /* FOOTER */
-footer { background:#111; padding:40px 50px; text-align:center; border-top:1px solid #333; }
-footer h3 { color:var(--gold); font-size:22px; margin-bottom:10px; }
+footer { background:#111; padding:50px 50px; text-align:center; border-top:1px solid #333; }
+footer h3 { color:var(--gold); font-size:22px; margin-bottom:15px; }
 footer p { color:#ccc; }
 
 /* ANIMATIONS */
@@ -137,11 +130,11 @@ footer p { color:#ccc; }
 
 <!-- NAVBAR -->
 <nav>
-    <h1 onclick="showPage('home')">The Orchard Travels</h1>
+    <h1 onclick="switchPage('home')">The Orchard Travels</h1>
     <ul>
-        <li onclick="showPage('home')">Home</li>
-        <li onclick="showPage('plans')">Travel Plans</li>
-        <li onclick="showPage('about')">About Us</li>
+        <li onclick="switchPage('home')">Home</li>
+        <li onclick="switchPage('plans')">Travel Plans</li>
+        <li onclick="switchPage('about')">About Us</li>
     </ul>
 </nav>
 
@@ -168,8 +161,10 @@ footer p { color:#ccc; }
 <!-- ABOUT US -->
 <div id="about" class="page">
     <h2 class="page-title">About Us</h2>
-    <p style="text-align:center; max-width:800px; margin:0 auto; color:#ccc; font-size:18px;">
+    <p style="text-align:center; max-width:900px; margin:0 auto; color:#ccc; font-size:20px; line-height:1.8;">
         The Orchard Travels is your gateway to luxury and adventure in Bhutan. We curate premium experiences, combining comfort, culture, and nature. Our team ensures every journey is memorable and seamless.  
+        <br><br>
+        From cultural tours to luxury stays, every package is tailored to provide unique experiences. Let us handle the planning while you enjoy the journey.
     </p>
 </div>
 
@@ -182,10 +177,29 @@ footer p { color:#ccc; }
 </footer>
 
 <script>
-function showPage(id) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    const page = document.getElementById(id);
-    page.classList.add('active');
+// Smooth page transitions
+let currentPage = document.querySelector('.page.active');
+
+function switchPage(id) {
+    if(currentPage.id === id) return;
+
+    // Fade out current
+    currentPage.style.opacity = 0;
+    currentPage.style.transform = "translateY(50px)";
+    setTimeout(() => {
+        currentPage.classList.remove('active');
+
+        // Show next
+        const nextPage = document.getElementById(id);
+        nextPage.classList.add('active');
+        nextPage.style.opacity = 0;
+        nextPage.style.transform = "translateY(50px)";
+        setTimeout(() => {
+            nextPage.style.opacity = 1;
+            nextPage.style.transform = "translateY(0)";
+        }, 50);
+        currentPage = nextPage;
+    }, 400);
 }
 </script>
 
