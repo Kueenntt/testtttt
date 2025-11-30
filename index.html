@@ -4,202 +4,117 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Orchard Travels - Bhutan</title>
-
-<!-- Google Font -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
 <style>
 :root {
     --gold: #d4af37;
     --dark: #000;
-    --card-bg: rgba(255, 255, 255, 0.05);
-    --card-border: rgba(255, 255, 255, 0.1);
+    --card-bg: rgba(255,255,255,0.05);
+    --card-border: rgba(255,255,255,0.1);
 }
 
-/* Reset & Body */
-body {
-    margin: 0;
-    font-family: "Poppins", sans-serif;
-    background: var(--dark);
-    color: #fff;
-    overflow-x: hidden;
-    transition: background 0.5s ease;
-}
+/* General */
+body {margin:0;font-family:"Poppins",sans-serif;background:var(--dark);color:#fff;overflow-x:hidden;transition:0.5s;}
+nav {width:100%;position:fixed;top:0;padding:20px 50px;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);display:flex;justify-content:space-between;align-items:center;z-index:100;border-bottom:1px solid rgba(255,255,255,0.08);}
+nav h1{font-weight:700;font-size:28px;color:var(--gold);cursor:pointer;transition:0.3s;}
+nav h1:hover{transform:scale(1.05);text-shadow:0 0 10px var(--gold);}
+nav ul{display:flex;gap:35px;list-style:none;margin:0;padding:0;}
+nav li{font-size:16px;cursor:pointer;position:relative;transition:0.3s;}
+nav li::after{content:"";position:absolute;bottom:-5px;left:0;width:0%;height:2px;background:var(--gold);transition:width 0.3s;}
+nav li:hover{color:var(--gold);}
+nav li:hover::after{width:100%;}
 
-/* NAVBAR */
-nav {
-    width: 100%;
-    position: fixed;
-    top: 0;
-    padding: 20px 50px;
-    background: rgba(0,0,0,0.85);
-    backdrop-filter: blur(10px);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 100;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-    animation: slideDown 1s ease forwards;
-}
-
-nav h1 {
-    font-weight: 700;
-    font-size: 28px;
-    color: var(--gold);
-    letter-spacing: 2px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-nav h1:hover { transform: scale(1.05); text-shadow: 0 0 10px var(--gold); }
-
-nav ul { display: flex; gap: 35px; list-style: none; margin:0; padding:0; }
-nav li { font-size: 16px; cursor: pointer; position: relative; transition:0.3s; }
-nav li::after { content:""; position:absolute; bottom:-5px; left:0; width:0%; height:2px; background:var(--gold); transition:width 0.3s;}
-nav li:hover { color:var(--gold); }
-nav li:hover::after { width:100%; }
+/* Pages */
+.page{display:none;padding:180px 50px 100px;min-height:100vh;opacity:0;transform:translateY(50px);transition:all 0.6s ease;}
+.page.active{display:block;opacity:1;transform:translateY(0);}
+.page-title{text-align:center;color:var(--gold);font-size:42px;margin-bottom:35px;}
 
 /* HERO */
-.hero { padding:220px 50px 100px; text-align:center; background: linear-gradient(to bottom,#111,#000); animation: fadeIn 1s ease forwards;}
-.main-title { font-size:55px; font-weight:700; color:var(--gold); margin-bottom:0; letter-spacing:1.5px; animation: fadeSlideDown 1.2s ease forwards;}
-.sub-title { font-size:22px; font-weight:500; color:var(--gold); margin-top:5px; margin-bottom:25px; letter-spacing:6px; animation: fadeSlideDown 1.4s ease forwards;}
-.hero p { font-size:20px; max-width:800px; margin:0 auto; color:#ccc; animation: fadeIn 1.5s ease forwards; }
+.hero{text-align:center;padding:220px 50px 100px;background:linear-gradient(to bottom,#111,#000);}
+.main-title{font-size:55px;font-weight:700;color:var(--gold);margin-bottom:0;letter-spacing:1.5px;}
+.sub-title{font-size:22px;font-weight:500;color:var(--gold);margin-top:5px;margin-bottom:25px;letter-spacing:6px;}
+.hero p{font-size:20px;max-width:800px;margin:0 auto;color:#ccc;}
 
-/* PAGES */
-.page {
-    display:none;
-    padding:180px 50px 100px; /* extra top padding for nav */
-    min-height:100vh;
-    opacity:0;
-    transform:translateY(50px);
-    transition: all 0.6s ease;
-}
-.page.active {
-    display:block;
-    opacity:1;
-    transform:translateY(0);
-}
-.page-title { text-align:center; color:var(--gold); font-size:42px; margin-bottom:35px; }
+/* Travel Plans buttons */
+.plan-buttons{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:35px;justify-items:center;margin-bottom:50px;}
+.plan-btn{width:100%;padding:70px 20px;background:var(--gold);color:#000;border:none;border-radius:20px;font-size:24px;font-weight:700;cursor:pointer;transition:0.5s;display:flex;align-items:center;justify-content:center;text-transform:uppercase;box-shadow:0 10px 25px rgba(212,175,55,0.4);}
+.plan-btn:hover{background:#f5d76e;transform:scale(1.07) translateY(-7px);box-shadow:0 18px 40px rgba(212,175,55,0.6);}
 
-/* TRAVEL PLAN BUTTONS (Collage/Grid) */
-.plan-buttons {
-    display:grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 35px;
-    justify-items: center;
-    margin-bottom:50px;
-}
-.plan-btn {
-    width: 100%;
-    padding: 70px 20px;
-    background: var(--gold);
-    color: #000;
-    border:none;
-    border-radius: 20px;
-    font-size:24px;
-    font-weight:700;
-    cursor:pointer;
-    transition:0.5s;
-    text-align:center;
-    box-shadow: 0 10px 25px rgba(212,175,55,0.4);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-transform: uppercase;
-}
-.plan-btn:hover {
-    background: #f5d76e;
-    transform: scale(1.07) translateY(-7px);
-    box-shadow: 0 18px 40px rgba(212,175,55,0.6);
-}
+/* Footer */
+footer{background:#111;padding:50px 50px;text-align:center;border-top:1px solid #333;}
+footer h3{color:var(--gold);font-size:22px;margin-bottom:15px;}
+footer p{color:#ccc;}
 
-/* FOOTER */
-footer { background:#111; padding:50px 50px; text-align:center; border-top:1px solid #333; }
-footer h3 { color:var(--gold); font-size:22px; margin-bottom:15px; }
-footer p { color:#ccc; }
-
-/* ANIMATIONS */
-@keyframes fadeIn { from {opacity:0;} to{opacity:1;} }
-@keyframes fadeSlideUp { from {opacity:0; transform:translateY(40px);} to{opacity:1; transform:translateY(0);} }
-@keyframes fadeSlideDown { from {opacity:0; transform:translateY(-40px);} to{opacity:1; transform:translateY(0);} }
-@keyframes slideDown { from {transform:translateY(-100px);} to{transform:translateY(0);} }
-
+/* Animations */
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes fadeSlideDown{from{opacity:0;transform:translateY(-40px);}to{opacity:1;transform:translateY(0);}}
+@keyframes slideDown{from{transform:translateY(-100px);}to{transform:translateY(0);}}
 </style>
 </head>
-
 <body>
 
-<!-- NAVBAR -->
 <nav>
-    <h1 onclick="switchPage('home')">The Orchard Travels</h1>
-    <ul>
-        <li onclick="switchPage('home')">Home</li>
-        <li onclick="switchPage('plans')">Travel Plans</li>
-        <li onclick="switchPage('about')">About Us</li>
-    </ul>
+<h1 onclick="switchPage('home')">The Orchard Travels</h1>
+<ul>
+<li onclick="switchPage('home')">Home</li>
+<li onclick="switchPage('plans')">Travel Plans</li>
+<li onclick="switchPage('about')">About Us</li>
+</ul>
 </nav>
 
-<!-- HOME PAGE -->
+<!-- Home -->
 <div id="home" class="page active">
-    <div class="hero">
-        <h2 class="main-title">The Orchard Travels</h2>
-        <h3 class="sub-title">BHUTAN</h3>
-        <p>Discover exclusive destinations, premium packages, and world-class experiences designed for those who want luxury, adventure, and unforgettable moments.</p>
-    </div>
+<div class="hero">
+<h2 class="main-title">The Orchard Travels</h2>
+<h3 class="sub-title">BHUTAN</h3>
+<p>Discover exclusive destinations, premium packages, and world-class experiences designed for those who want luxury, adventure, and unforgettable moments.</p>
+</div>
 </div>
 
-<!-- TRAVEL PLANS -->
+<!-- Travel Plans -->
 <div id="plans" class="page">
-    <h2 class="page-title">Travel Plans</h2>
-    <div class="plan-buttons">
-        <button class="plan-btn" onclick="location.href='special.html'">Special Package</button>
-        <button class="plan-btn" onclick="location.href='diamond.html'">Diamond Package</button>
-        <button class="plan-btn" onclick="location.href='platinum.html'">Platinum Package</button>
-        <button class="plan-btn" onclick="location.href='gold.html'">Gold Package</button>
-    </div>
+<h2 class="page-title">Travel Plans</h2>
+<div class="plan-buttons">
+<button class="plan-btn" onclick="location.href='special.html'">Special Package</button>
+<button class="plan-btn" onclick="location.href='diamond.html'">Diamond Package</button>
+<button class="plan-btn" onclick="location.href='platinum.html'">Platinum Package</button>
+<button class="plan-btn" onclick="location.href='gold.html'">Gold Package</button>
+</div>
 </div>
 
-<!-- ABOUT US -->
+<!-- About Us -->
 <div id="about" class="page">
-    <h2 class="page-title">About Us</h2>
-    <p style="text-align:center; max-width:900px; margin:0 auto; color:#ccc; font-size:20px; line-height:1.8;">
-        The Orchard Travels is your gateway to luxury and adventure in Bhutan. We curate premium experiences, combining comfort, culture, and nature. Our team ensures every journey is memorable and seamless.  
-        <br><br>
-        From cultural tours to luxury stays, every package is tailored to provide unique experiences. Let us handle the planning while you enjoy the journey.
-    </p>
+<h2 class="page-title">About Us</h2>
+<p style="text-align:center;max-width:900px;margin:0 auto;color:#ccc;font-size:20px;line-height:1.8;">
+The Orchard Travels is your gateway to luxury and adventure in Bhutan. We curate premium experiences, combining comfort, culture, and nature. Our team ensures every journey is memorable and seamless.<br><br>
+From cultural tours to luxury stays, every package is tailored to provide unique experiences. Let us handle the planning while you enjoy the journey.
+</p>
 </div>
 
-<!-- FOOTER -->
+<!-- Footer -->
 <footer>
-    <h3>Contact Us</h3>
-    <p>Phone: +975 12345678</p>
-    <p>Email: orchardtravels@gmail.com</p>
-    <p>Location: Thimphu, Bhutan</p>
+<h3>Contact Us</h3>
+<p>Phone: +975 12345678</p>
+<p>Email: orchardtravels@gmail.com</p>
+<p>Location: Thimphu, Bhutan</p>
 </footer>
 
 <script>
 // Smooth page transitions
-let currentPage = document.querySelector('.page.active');
-
-function switchPage(id) {
-    if(currentPage.id === id) return;
-
-    // Fade out current
-    currentPage.style.opacity = 0;
-    currentPage.style.transform = "translateY(50px)";
-    setTimeout(() => {
-        currentPage.classList.remove('active');
-
-        // Show next
-        const nextPage = document.getElementById(id);
-        nextPage.classList.add('active');
-        nextPage.style.opacity = 0;
-        nextPage.style.transform = "translateY(50px)";
-        setTimeout(() => {
-            nextPage.style.opacity = 1;
-            nextPage.style.transform = "translateY(0)";
-        }, 50);
-        currentPage = nextPage;
-    }, 400);
+let currentPage=document.querySelector('.page.active');
+function switchPage(id){
+if(currentPage.id===id) return;
+currentPage.style.opacity=0;
+currentPage.style.transform="translateY(50px)";
+setTimeout(()=>{
+currentPage.classList.remove('active');
+const nextPage=document.getElementById(id);
+nextPage.classList.add('active');
+nextPage.style.opacity=0;
+nextPage.style.transform="translateY(50px)";
+setTimeout(()=>{nextPage.style.opacity=1;nextPage.style.transform="translateY(0)";},50);
+currentPage=nextPage;
+},400);
 }
 </script>
 
