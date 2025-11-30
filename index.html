@@ -1,224 +1,547 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Orchard Travels - Bhutan</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-/* GENERAL RESET */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-body {
-  font-family: "Poppins", sans-serif;
-  background: #000;
-  color: #fff;
-  overflow-x: hidden;
-}
-html { scroll-behavior: smooth; }
-:root{
-  --gold:#d4af37;
-  --card-bg:linear-gradient(145deg,#1c1c1c,#111);
-  --card-shadow:rgba(212,175,55,0.35);
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Orchard Travels, Bhutan</title> 
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        /* --- Global Styles and Typography --- */
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
 
-/* NAVBAR */
-nav{
-  width:100%;
-  position:fixed;
-  top:0; left:0;
-  padding:20px 50px;
-  background:rgba(0,0,0,0.95);
-  backdrop-filter:blur(10px);
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  z-index:1000;
-  border-bottom:1px solid rgba(255,255,255,0.08);
-  box-shadow:0 4px 15px rgba(0,0,0,0.5);
-}
-nav h1{
-  font-weight:700;
-  font-size:28px;
-  color:var(--gold);
-  cursor:pointer;
-  transition:0.3s;
-}
-nav h1:hover{ transform:scale(1.05); text-shadow:0 0 10px var(--gold); }
-nav ul{ display:flex; gap:35px; list-style:none; }
-nav li{ font-size:16px; cursor:pointer; position:relative; transition:0.3s; }
-nav li::after{
-  content:""; position:absolute; bottom:-5px; left:0;
-  width:0%; height:2px; background:var(--gold); transition:width 0.3s;
-}
-nav li:hover{ color:var(--gold); }
-nav li:hover::after{ width:100%; }
+        :root {
+            --primary-color: #ff9900; /* Gold/Orange Accent */
+            --secondary-color: #d1a600; /* Darker Gold */
+            --accent-color: #e55300; /* Deep Orange Accent for CTAs */
+            --text-light: #f4f4f4; /* Light text for readability */
+            --bg-light: #111; /* Very Dark Grey/Off-Black for Content Sections */
+            --bg-dark: #000; /* PURE BLACK BACKGROUND */
+            --transition-speed: 0.4s;
+        }
 
-/* PAGE CONTAINER */
-.page{ display:none; padding:160px 50px 100px; min-height:100vh; opacity:0; transform:translateY(50px); transition:all 0.6s ease; }
-.page.active{ display:block; opacity:1; transform:translateY(0); }
-.page-title{ text-align:center; color:var(--gold); font-size:42px; margin-bottom:35px; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-/* HERO */
-.hero{ text-align:center; padding:220px 50px 100px; background:linear-gradient(to bottom,#111,#000); animation:fadeInSlide 1s ease forwards; }
-.main-title{ font-size:55px; font-weight:700; color:var(--gold); margin-bottom:0; letter-spacing:1.5px; opacity:0; transform:translateY(-40px); animation:fadeSlideDown 1s ease forwards 0.3s; }
-.sub-title{ font-size:22px; font-weight:500; color:var(--gold); margin-top:5px; margin-bottom:25px; letter-spacing:6px; opacity:0; transform:translateY(-20px); animation:fadeSlideDown 1s ease forwards 0.6s; }
-.hero p{ font-size:20px; max-width:800px; margin:0 auto; color:#ccc; opacity:0; transform:translateY(20px); animation:fadeSlideUp 1s ease forwards 0.9s; }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-light);
+            line-height: 1.6;
+            background-color: var(--bg-dark);
+            scroll-behavior: smooth;
+        }
 
-/* Travel Plan Buttons Collage */
-.plan-buttons{
-  display:grid;
-  grid-template-columns:repeat(2, 1fr);
-  grid-template-rows:repeat(2, 1fr);
-  gap:50px;
-  width:100%;
-  max-width:1200px;
-  margin:0 auto 50px auto;
-}
-.plan-btn{
-  width:100%;
-  padding:150px 20px; /* bigger buttons */
-  background:var(--card-bg);
-  color:var(--gold);
-  border:3px solid var(--gold); /* brighter border */
-  border-radius:25px;
-  font-size:30px;
-  font-weight:700;
-  cursor:pointer;
-  text-align:center;
-  box-shadow:0 10px 30px var(--card-shadow);
-  transition:0.5s;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  position:relative;
-  overflow:hidden;
-}
-.plan-btn span{ font-size:18px; color:#ccc; margin-top:10px; }
-.plan-btn::before{
-  content:""; position:absolute; top:0; left:0; width:100%; height:100%;
-  background:linear-gradient(120deg,rgba(212,175,55,0.2),transparent,rgba(212,175,55,0.2));
-  opacity:0; transition:0.5s;
-}
-.plan-btn:hover::before{ opacity:1; }
-.plan-btn:hover{ transform:translateY(-15px) scale(1.08); box-shadow:0 25px 50px var(--card-shadow); }
-/* Book Now button in bottom-right corner */
-.book-btn{
-  position:absolute;
-  bottom:20px; right:20px;
-  background:var(--gold);
-  color:#000;
-  border:none;
-  padding:12px 25px;
-  border-radius:10px;
-  font-weight:600;
-  cursor:pointer;
-  font-size:18px;
-  transition:0.3s;
-}
-.book-btn:hover{ transform:scale(1.05); box-shadow:0 0 15px var(--gold); }
+        /* --- Navigation Bar --- */
+        .navbar {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid var(--primary-color);
+        }
 
-/* About Us */
-#about p{ max-width:900px; margin:0 auto; text-align:center; color:#ccc; font-size:20px; line-height:1.8; word-wrap: break-word; }
+        .logo {
+            font-size: 1.8em;
+            font-weight: 800;
+            color: var(--primary-color);
+            letter-spacing: 2px;
+        }
 
-/* Footer */
-footer{ background:#111; padding:50px 50px; text-align:center; border-top:1px solid #333; }
-footer h3{ color:var(--gold); font-size:22px; margin-bottom:15px; }
-footer p{ color:#ccc; }
+        .navbar ul {
+            list-style: none;
+            display: flex;
+        }
 
-/* Animations */
-@keyframes fadeInSlide{ from{opacity:0;}to{opacity:1;} }
-@keyframes fadeSlideDown{ from{opacity:0;transform:translateY(-40px);}to{opacity:1;transform:translateY(0);} }
-@keyframes fadeSlideUp{ from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);} }
-</style>
+        .navbar li {
+            margin-left: 25px;
+        }
+
+        .navbar a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color var(--transition-speed), color var(--transition-speed);
+        }
+
+        /* Hover Animation: Brighter background on hover */
+        .navbar a:hover,
+        .navbar a.active {
+            background-color: var(--primary-color);
+            color: var(--bg-dark);
+            box-shadow: 0 0 10px rgba(255, 153, 0, 0.5);
+        }
+
+        /* Dropdown Styles */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: var(--bg-light); 
+            min-width: 200px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.5);
+            z-index: 1;
+            border-top: 3px solid var(--primary-color);
+            padding: 10px 0;
+            border-radius: 0 0 8px 8px;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .dropdown-content a {
+            color: var(--text-light);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-weight: 400;
+            transition: background-color 0.2s;
+        }
+
+        /* Hover Animation: Dropdown items */
+        .dropdown-content a:hover {
+            background-color: var(--secondary-color);
+            color: var(--bg-dark);
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* --- Main Content Container --- */
+        .content-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* --- Page Transitions (Smooth Animation) --- */
+        .page {
+            /* Initially hidden and styled for fade-in */
+            display: none;
+            padding: 40px;
+            margin-bottom: 40px;
+            min-height: 70vh;
+            border-radius: 12px;
+            background-color: var(--bg-light);
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.05);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity var(--transition-speed) ease-out, transform var(--transition-speed) ease-out;
+        }
+
+        .page.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Home Page (Hero) --- */
+        .hero-section {
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            /* Placeholder image for Bhutan */
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), 
+                        url('https://source.unsplash.com/1600x900/?bhutan,monastery') no-repeat center center/cover;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            padding: 50px;
+            color: var(--text-light);
+        }
+
+        .hero-section h1 {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        .hero-section p {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            max-width: 600px;
+            font-weight: 300;
+        }
+
+        .cta-button {
+            background-color: var(--accent-color);
+            color: var(--text-light);
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1em;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+
+        /* Hover Animation: CTA button scale and shadow */
+        .cta-button:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(255, 153, 0, 0.3);
+        }
+
+        /* Home Features */
+        .home-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+
+        .feature-card {
+            background-color: var(--bg-dark);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--bg-light);
+            transition: transform 0.3s ease-out, box-shadow 0.3s;
+        }
+
+        /* Hover Animation: Feature card lift */
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(255, 153, 0, 0.15);
+        }
+
+        .feature-card i {
+            font-size: 3em;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.4em;
+            margin-bottom: 10px;
+            color: var(--text-light);
+        }
+
+        /* --- Package Sections --- */
+        .page h2 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        .package-intro {
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            font-weight: 300;
+            color: var(--text-light);
+        }
+
+        .package-details {
+            list-style: none;
+            margin-bottom: 40px;
+        }
+
+        .package-details li {
+            font-size: 1.1em;
+            padding: 10px 0;
+            border-bottom: 1px dashed var(--bg-dark);
+            display: flex;
+            align-items: center;
+            color: var(--text-light);
+        }
+
+        .package-details li i {
+            color: var(--accent-color);
+            margin-right: 15px;
+            font-size: 1.2em;
+        }
+
+        .book-now {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1em;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+
+        .book-now:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(255, 83, 0, 0.3);
+        }
+
+        /* --- Contact Form --- */
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid var(--primary-color);
+            border-radius: 8px;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1em;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 8px rgba(255, 153, 0, 0.5);
+        }
+
+        /* --- Footer --- */
+        footer {
+            background-color: var(--bg-dark);
+            color: var(--primary-color);
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9em;
+            border-top: 1px solid var(--secondary-color);
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+            }
+
+            .navbar nav {
+                margin-top: 10px;
+            }
+
+            .navbar ul {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .navbar li {
+                margin: 5px 0;
+                text-align: center;
+            }
+            
+            .dropdown {
+                width: 100%;
+            }
+            
+            .dropdown-content {
+                position: static;
+                width: 100%;
+                box-shadow: none;
+                padding: 0;
+                border-top: none;
+                border-radius: 0;
+            }
+
+            .hero-section h1 {
+                font-size: 2.5em;
+            }
+
+            .page {
+                padding: 20px;
+            }
+        }
+
+        /* Keyframe for Dropdown Fade In */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-<h1 onclick="switchPage('home')">The Orchard Travels</h1>
-<ul>
-<li onclick="switchPage('home')">Home</li>
-<li onclick="switchPage('plans')">Travel Plans</li>
-<li onclick="switchPage('about')">About Us</li>
-</ul>
-</nav>
+    <header class="navbar">
+        <div class="logo">The Orchard Travels</div>
+        <nav>
+            <ul>
+                <li><a href="#home" class="nav-link active" data-page="home">Home</a></li>
+                <li class="dropdown">
+                    <a href="#" class="nav-link">Travel Plans <i class="fas fa-caret-down"></i></a>
+                    <div class="dropdown-content">
+                        <a href="#special" class="nav-link" data-page="special">Special Package</a>
+                        <a href="#diamond" class="nav-link" data-page="diamond">Diamond Package</a>
+                        <a href="#platinum" class="nav-link" data-page="platinum">Platinum Package</a>
+                        <a href="#gold" class="nav-link" data-page="gold">Gold Package</a>
+                    </div>
+                </li>
+                <li><a href="#contact" class="nav-link" data-page="contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
 
-<!-- HOME -->
-<div id="home" class="page active">
-<div class="hero">
-<h2 class="main-title">The Orchard Travels</h2>
-<h3 class="sub-title">BHUTAN</h3>
-<p>Discover exclusive destinations, premium packages, and world-class experiences designed for those who want luxury, adventure, and unforgettable moments.</p>
-</div>
-</div>
+    <main class="content-container">
+        
+        <section id="home" class="page active" data-page-name="home">
+            <div class="hero-section">
+                <h1>Discover the Kingdom of Bhutan.</h1>
+                <p>Curated trips for the discerning traveler. Explore the world with The Orchard Travels, Bhutan.</p>
+                <a href="#special" class="cta-button" onclick="showPage('special')">View Packages</a>
+            </div>
+            <div class="home-features">
+                <div class="feature-card">
+                    <i class="fas fa-mountain"></i>
+                    <h3>Himalayan Adventures</h3>
+                    <p>Access to majestic peaks and serene monasteries.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-headset"></i>
+                    <h3>24/7 Local Support</h3>
+                    <p>Dedicated support for a worry-free, authentic trip.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-leaf"></i>
+                    <h3>Sustainable Tourism</h3>
+                    <p>Committed to high-value, low-impact travel.</p>
+                </div>
+            </div>
+        </section>
 
-<!-- TRAVEL PLANS -->
-<div id="plans" class="page">
-<h2 class="page-title">Travel Plans</h2>
-<div class="plan-buttons">
-<div style="position:relative;">
-<button class="plan-btn" onclick="location.href='special.html'">Special Package
-<span>Luxury, Adventure, Personalized</span></button>
-<button class="book-btn" onclick="location.href='book.html?package=special'">Book Now</button>
-</div>
-<div style="position:relative;">
-<button class="plan-btn" onclick="location.href='diamond.html'">Diamond Package
-<span>Premium Stays, Exclusive Tours</span></button>
-<button class="book-btn" onclick="location.href='book.html?package=diamond'">Book Now</button>
-</div>
-<div style="position:relative;">
-<button class="plan-btn" onclick="location.href='platinum.html'">Platinum Package
-<span>Top Luxury, Custom Itineraries</span></button>
-<button class="book-btn" onclick="location.href='book.html?package=platinum'">Book Now</button>
-</div>
-<div style="position:relative;">
-<button class="plan-btn" onclick="location.href='gold.html'">Gold Package
-<span>Comfort, Culture, Adventure</span></button>
-<button class="book-btn" onclick="location.href='book.html?package=gold'">Book Now</button>
-</div>
-</div>
-</div>
+        <section id="special" class="page" data-page-name="special">
+            <h2>✨ Special Package: The Weekend Getaway</h2>
+            <p class="package-intro">Perfect for a quick, luxurious escape. All-inclusive short trips to local hotspots.</p>
+            <ul class="package-details">
+                <li><i class="fas fa-plane-departure"></i> Round-trip flights (Economy Plus)</li>
+                <li><i class="fas fa-hotel"></i> 3-day/2-night stay in a 4-star boutique hotel</li>
+                <li><i class="fas fa-car"></i> Airport transfers included</li>
+                <li><i class="fas fa-utensils"></i> Daily breakfast</li>
+            </ul>
+            <button class="book-now">Book Now</button>
+        </section>
 
-<!-- ABOUT US -->
-<div id="about" class="page">
-<h2 class="page-title">About Us</h2>
-<p>
-The Orchard Travels is your gateway to luxury and adventure in Bhutan. We curate premium experiences, combining comfort, culture, and nature. Our team ensures every journey is memorable and seamless.<br><br>
-From cultural tours to luxury stays, every package is tailored to provide unique experiences. Let us handle the planning while you enjoy the journey.
-</p>
-</div>
+        <section id="diamond" class="page" data-page-name="diamond">
+            <h2>💎 Diamond Package: The Ultra-Luxury Experience</h2>
+            <p class="package-intro">Our most exclusive offering. Bespoke travel planning with unparalleled service.</p>
+            <ul class="package-details">
+                <li><i class="fas fa-jet-fighter"></i> Private Jet Charter (Optional)</li>
+                <li><i class="fas fa-concierge-bell"></i> Dedicated personal concierge 24/7</li>
+                <li><i class="fas fa-house-user"></i> Private villa or penthouse suite accommodations</li>
+                <li><i class="fas fa-champagne-glasses"></i> Michelin-star dining experiences</li>
+                <li><i class="fas fa-umbrella-beach"></i> Exclusive private tours and excursions</li>
+            </ul>
+            <button class="book-now">Book Now</button>
+        </section>
+        
+        <section id="platinum" class="page" data-page-name="platinum">
+            <h2>👑 Platinum Package: Premium Global Expedition</h2>
+            <p class="package-intro">Long-haul luxury travel with enhanced comfort and world-class amenities.</p>
+            <ul class="package-details">
+                <li><i class="fas fa-plane"></i> Business Class flights for all legs</li>
+                <li><i class="fas fa-mountain"></i> 7-day/6-night stay in 5-star resorts</li>
+                <li><i class="fas fa-shield-alt"></i> Comprehensive travel insurance</li>
+                <li><i class="fas fa-bus-simple"></i> Private chauffeur service</li>
+            </ul>
+            <button class="book-now">Book Now</button>
+        </section>
 
-<!-- FOOTER -->
-<footer>
-<h3>Contact Us</h3>
-<p>Phone: +975 12345678</p>
-<p>Email: orchardtravels@gmail.com</p>
-<p>Location: Thimphu, Bhutan</p>
-</footer>
+        <section id="gold" class="page" data-page-name="gold">
+            <h2>🌟 Gold Package: Classic Comfort & Value</h2>
+            <p class="package-intro">The perfect balance of luxury and value for a memorable vacation.</p>
+            <ul class="package-details">
+                <li><i class="fas fa-plane"></i> Standard Economy flights</li>
+                <li><i class="fas fa-hotel"></i> 5-day/4-night stay in premium hotels</li>
+                <li><i class="fas fa-map-marked-alt"></i> Guided city tour included</li>
+                <li><i class="fas fa-luggage-cart"></i> Luggage handling services</li>
+            </ul>
+            <button class="book-now">Book Now</button>
+        </section>
 
-<script>
-// Smooth page transitions
-let currentPage=document.querySelector('.page.active');
-function switchPage(id){
-if(currentPage.id===id) return;
-currentPage.style.opacity=0;
-currentPage.style.transform="translateY(50px)";
-setTimeout(()=>{
-currentPage.classList.remove('active');
-const nextPage=document.getElementById(id);
-nextPage.classList.add('active');
-nextPage.style.opacity=0;
-nextPage.style.transform="translateY(50px)";
-setTimeout(()=>{nextPage.style.opacity=1;nextPage.style.transform="translateY(0)";},50);
-currentPage=nextPage;
-},400);
-}
-</script>
+        <section id="contact" class="page" data-page-name="contact">
+            <h2>📞 Contact Our Travel Specialists</h2>
+            <p class="package-intro">Ready to plan your trip? Reach out to us for a personalized quote.</p>
+            <form class="contact-form">
+                <input type="text" placeholder="Your Name" required>
+                <input type="email" placeholder="Your Email" required>
+                <textarea placeholder="Your Inquiry" rows="4" required></textarea>
+                <button type="submit" class="cta-button">Send Message</button>
+            </form>
+        </section>
+        
+    </main>
 
+    <footer>
+        &copy; 2025 The Orchard Travels, Bhutan | Happiness Awaits
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Function to show a specific page and hide others
+            window.showPage = (pageId) => {
+                // 1. Hide all pages
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                });
+
+                // 2. Show the requested page with transition classes
+                const targetPage = document.getElementById(pageId);
+                if (targetPage) {
+                    // Force reflow/repaint to ensure transition plays every time
+                    void targetPage.offsetWidth; 
+                    targetPage.classList.add('active');
+                    
+                    // Scroll to the top of the main content area
+                    const mainContent = document.querySelector('.content-container');
+                    if(mainContent) {
+                        mainContent.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+
+                // 3. Update active state in navigation
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                });
+
+                // Find and activate the link corresponding to the current page
+                const activeLink = document.querySelector(`.nav-link[data-page="${pageId}"]`);
+                if (activeLink) {
+                     activeLink.classList.add('active');
+                }
+            };
+
+            // Event listeners for all navigation links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const pageId = link.getAttribute('data-page');
+                    if (pageId) {
+                        e.preventDefault(); 
+                        showPage(pageId);
+                    }
+                });
+            });
+
+            // Initialization: Show the correct page on load (handles direct link sharing with #hash)
+            const initialPageId = window.location.hash ? window.location.hash.substring(1) : 'home';
+            showPage(initialPageId);
+        });
+    </script>
 </body>
 </html>
