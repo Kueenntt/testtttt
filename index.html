@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>The Orchard Travels | Curated Journeys</title>
     
-<script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwi ndcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Inter:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     <style>
         /* Custom CSS for fonts and absolute dark theme */
@@ -13,6 +13,7 @@
             font-family: 'Inter', sans-serif;
             background-color: #0c0c0c; /* Deep charcoal */
             color: #f5f5f5; /* Near-white text for ultimate contrast */
+            min-height: 100vh; /* Ensure body covers full viewport height */
         }
         h1, h2, h3, h4 {
             font-family: 'Playfair Display', serif;
@@ -67,35 +68,45 @@
 </head>
 <body class="pt-24">
 
-    <!-- NAVIGATION BAR (Fixed, professional dark bar) --><nav class="fixed top-0 w-full bg-[#111111] shadow-2xl z-50 py-5 border-b border-[#222222]">
+    <!-- NAVIGATION BAR (Fixed, professional dark bar) -->
+    <nav class="fixed top-0 w-full bg-[#111111] shadow-2xl z-50 py-5 border-b border-[#222222]">
         <div class="max-w-7xl mx-auto flex justify-between items-center px-6">
-            <!-- Logo replaced text --><a href="#home" class="flex items-center space-x-3">
+            <!-- Logo replaced text -->
+            <a href="#home" class="flex items-center space-x-3" onclick="navigate('home')">
                 <img src="https://assets.website-files.com/5ffc279c09440306c4b266ae/600570894042875b4260a9f0_The-Orchard-logos-white.png" alt="The Orchard Travels Logo" class="h-12 w-auto logo-filter">
             </a>
-            <ul class="flex space-x-12">
-                <li><a href="#home" class="nav-link text-gray-300 hover:text-white font-semibold transition-colors duration-300 tracking-wider text-lg">Home</a></li>
-                <li><a href="#plans" class="nav-link text-gray-300 hover:text-white font-semibold transition-colors duration-300 tracking-wider text-lg">Travel Plans</a></li>
-                <li><a href="#contact" class="nav-link text-gray-300 hover:text-white font-semibold transition-colors duration-300 tracking-wider text-lg">Contact Us</a></li>
+            <ul class="flex space-x-4 sm:space-x-12">
+                <li><a href="#home" data-page="home" class="nav-link text-gray-300 hover:text-white font-semibold transition-colors duration-300 tracking-wider text-sm sm:text-lg" onclick="navigate('home')">Home</a></li>
+                <li><a href="#plans" data-page="plans" class="nav-link text-gray-300 hover:text-white font-semibold transition-colors duration-300 tracking-wider text-sm sm:text-lg" onclick="navigate('plans')">Travel Plans</a></li>
+                <li><a href="#contact" data-page="contact" class="nav-link text-gray-300 hover:text-white font-semibold transition-colors duration-300 tracking-wider text-sm sm:text-lg" onclick="navigate('contact')">Contact Us</a></li>
             </ul>
         </div>
     </nav>
 
-    <!-- MAIN CONTENT CONTAINER (Removed page-initial class) --><main id="app-content" class="min-h-screen pt-4"></main>
+    <!-- MAIN CONTENT CONTAINER -->
+    <main id="app-content" class="min-h-screen pt-4"></main>
 
-    <!-- Footer --><footer class="bg-[#111111] text-gray-500 py-12 mt-20 text-center border-t border-gray-900 shadow-inner">
+    <!-- Footer -->
+    <footer class="bg-[#111111] text-gray-500 py-12 mt-20 text-center border-t border-gray-900 shadow-inner">
         <p class="text-base font-light tracking-wider">&copy; 2024 The Orchard Travels. Curating the world's finest, bespoke journeys.</p>
         <div class="mt-4 flex justify-center space-x-6 text-xl">
-            <!-- Updated Social Media Links --><a href="#" class="hover:text-green-500 transition-colors" title="WhatsApp">💬</a>
+            <!-- Updated Social Media Links -->
+            <a href="#" class="hover:text-green-500 transition-colors" title="WhatsApp">💬</a>
             <a href="#" class="hover:text-green-500 transition-colors" title="TikTok">🎶</a>
             <a href="#" class="hover:text-green-500 transition-colors" title="Instagram">📸</a>
         </div>
     </footer>
 
 <script>
+    // --- STATE MANAGEMENT ---
+    let currentPage = 'home';
+    const contentContainer = document.getElementById('app-content');
+    const navLinks = document.querySelectorAll('.nav-link');
+
     // --- UTILITY FUNCTION: FORMAT ITINERARY INTO SEPARATE DAILY CARDS ---
     function formatItinerarySeparated(rawText, pkgColorClass) {
         const lines = rawText.split('\n').filter(line => line.trim() !== '');
-        let html = '<div class="space-y-6">'; // Main container for daily cards
+        let html = '<div class="space-y-8 mt-12">'; // Main container for daily cards
         let currentDayContent = '';
         let currentDayTitle = '';
 
@@ -104,9 +115,12 @@
             
             // Apply the new, clean card structure for each Day/Section with brighter borders
             html += `
-                <div class="p-6 rounded-xl shadow-lg border border-green-500/50 bg-[#151515] hover:border-green-400/70 transition duration-300">
-                    <h4 class="text-3xl font-extrabold ${pkgColorClass} mb-4 border-b border-gray-800 pb-2">${title}</h4>
-                    <ul class="space-y-3 pl-0 list-none text-lg">
+                <div class="p-6 rounded-xl shadow-xl border border-green-500/30 bg-[#151515] hover:border-green-400/50 transition duration-300 travel-card">
+                    <h4 class="text-3xl font-extrabold ${pkgColorClass} mb-4 border-b border-gray-800 pb-2 flex items-center">
+                        <svg class="w-6 h-6 mr-3 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        ${title}
+                    </h4>
+                    <ul class="space-y-4 pl-0 list-none text-lg">
                         ${content}
                     </ul>
                 </div>
@@ -136,14 +150,17 @@
                 } else if (activity.toLowerCase().includes('(recommended)')) {
                     marker = '<span class="mr-3 text-yellow-500 font-bold">*</span>';
                     textColor = 'text-gray-200 font-medium';
+                } else if (activity.toLowerCase().includes('hike') || activity.toLowerCase().includes('trek')) {
+                    marker = '<span class="mr-3 text-blue-400 font-bold">^</span>';
+                    textColor = 'text-blue-300';
                 }
 
-                currentDayContent += `<li class="${textColor} flex items-start">${marker}${activity}</li>`;
+                currentDayContent += `<li class="${textColor} flex items-start">${marker}<span class="flex-1">${activity}</span></li>`;
             } else if (trimmedLine.length > 0) {
                  // Catch any lines that might not start with '-' but are still content
                  let marker = '<span class="mr-3 text-green-400 font-bold">•</span>';
                  let textColor = 'text-gray-300';
-                 currentDayContent += `<li class="${textColor} flex items-start">${marker}${trimmedLine}</li>`;
+                 currentDayContent += `<li class="${textColor} flex items-start">${marker}<span class="flex-1">${trimmedLine}</span></li>`;
             }
         });
 
@@ -159,11 +176,11 @@
     const packagesData = {
         'special': {
             id: 'special',
-            title: 'Special Package',
-            tag: 'special',
+            title: 'The Elevated Horizons Journey (10-Day Special)',
+            tag: 'Limited Edition',
             imgUrl: 'https://images.unsplash.com/photo-1579290076045-817c76891003?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80',
             color: 'text-red-400', // Distinct color for limited edition
-            tagline: 'Timeless Kingdom, Living Legends. Elevated Horizons, Enchanted Valleys. Soulful Trails, Joyful Encounters.',
+            tagline: 'Timeless Kingdom, Living Legends. Soulful Trails, Joyful Encounters. Includes Bumthang & Phobjikha.',
             duration: '10 Days / 9 Nights',
             price: 'Starting at $18,000 per person',
             cardDescription: 'Our most comprehensive journey: a 10-day cultural immersion, including Bumthang, Phobjikha, and the legendary Tiger’s Nest.',
@@ -292,11 +309,11 @@ Day 10 (Morning)
         },
         'diamond': {
             id: 'diamond',
-            title: 'Diamond Package',
-            tag: 'diamond',
+            title: 'The Diamond Experience (6-Day Luxury)',
+            tag: 'Luxury Curated',
             imgUrl: 'https://images.unsplash.com/photo-1520250497591-ab3f2f396435?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80',
             color: 'accent-gold',
-            tagline: 'Get The Most Valued Experience. With Experienced Guides And Private Transfers. Harmony With Nature\'s Beauty. Curated Unique Bhutanese Experiences.',
+            tagline: 'Get The Most Valued Experience. Harmony With Nature\'s Beauty. Curated Unique Bhutanese Experiences.',
             duration: '6 Days / 5 Nights',
             price: 'Starting at $12,000 per person',
             cardDescription: 'The ultimate 6-day luxury tour focusing on exclusive, curated experiences in the valleys of Paro, Thimphu, and Punakha.',
@@ -318,7 +335,6 @@ Day 10 (Morning)
 
 Day 1 (Afternoon)
 - Visit Kyichu Lhakhang
-
 - Travel Towards Thimphu
 - Visit Tamchog Lhakhang.(Optional)
 - 10 Minute Break At Chuzom.
@@ -326,109 +342,63 @@ Day 1 (Afternoon)
 
 Day 2 (Morning)
 - Breakfast and checkout.
-
--Travel and visit Dochula.
-
+- Travel and visit Dochula.
 - Visit Druk Wangyel Lhakhang
-
 - Tea break at Druk Wangyel Cafe.
-
 - Move towards Punakha.
-
 - Lunch
-
-
 
 Day 2 (Afternoon)
 - Travel to Chimi Lhakhang.
-
 - Travel to Wandue Phodrang Dzong.
-
 - Have a relaxed dinner and night stay at the hotel
-
-
-
-
 
 Day 3 (Morning)
 - Breakfast and checkout.
-
 - Hike to Khamsum Yulley Namgyal.
-
 - Rafting.
-
 - Travel towards town.
-
 - Lunch.
 
-
-
-
-
 Day 3 (Afternoon)
-
 - Visit Punakha Dzong.
-
 - Travel towards Thimphu.
-
 - Tea break at Druk Wangyel Cafe, Dochula.
-
 - Continue towards Thimphu for your night stay.
-
-
-
 
 Day 4 (Morning)
 - Breakfast and checkout.
-
 - Travel to Memorial Chhorten.
-
 - Travel to Buddha Point.
-
 - Travel to the Takin reserve zoo.
-
 - Travel towards the main town for lunch.
-
-
 
 Day 4 (Afternoon)
 - Roam around the Town for a shopping session.
-
 - Travel towards Tashichoedzong to end the day.
-
 - Travel towards Paro for your night stay. Relax for day 5.
-
-
 
 Day 5 (Morning)
 - Have a hearty, filling breakfast. (recommended)
-
 - Travel to Taktshang base.
-
 - Hike up to Taktshang.
-
-
 
 Day 5 (Afternoon)
 - Lunch on the way back down the mountain.
-
 - Tea break at town.
-
 - Roam around town. (Optional)
-
 - Travel to your night stay to relax and enjoy the night.
-
 
 Day 6 (Morning)
 - Breakfast then checkout and travel to the airport for departure.`
         },
         'platinum': {
             id: 'platinum',
-            title: 'Platinum Package',
-            tag: 'platinum',
+            title: 'The Platinum Expedition (8-Day Sacred Sites)',
+            tag: 'Iconic Sacred Sites',
             imgUrl: 'https://images.unsplash.com/photo-1498050108023-c5249f4cd085?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80',
             color: 'text-green-300',
-            tagline: 'Explore Bhutan\'s Iconic Sacred Experiences. Discover Majestic Dzongs, Stunning Vistas. Marvel At Rare, Graceful Cranes.',
+            tagline: 'Discover Majestic Dzongs, Stunning Vistas. Marvel At Rare, Graceful Cranes in Gangtey Valley.',
             duration: '8 Days / 7 Nights',
             price: 'Starting at $14,000 per person',
             cardDescription: 'An 8-day journey covering iconic sacred sites and natural wonders, including the serene Gangtey Valley and the Tiger\'s Nest.',
@@ -450,160 +420,93 @@ Day 6 (Morning)
 
 Day 1 (Afternoon)
 - Visit Kyichu Lhakhang
-
 - Travel towards Thimphu.
-
 - Visit Tamchog Lhakhang. (optional)
-
 - 10 Minute break at Chuzom.
-
 - Night stay at hotel in Thimphu.
-
-
 
 Day 2 (Morning)
 - Breakfast and checkout.
-
 - Travel and visit Dochula.
-
 - Visit Druk Wangyel Lhakhang
-
 - Tea break at Druk Wangyel Cafe.
-
 - Move towards Punakha.
-
 - Lunch.
-
-
 
 Day 2 (Afternoon)
 - Travel to Chimi Lhakhang.
-
 - Travel to Wandue Phodrang Dzong.
-
 - Have a relaxed dinner and night stay at the hotel
-
-
 
 Day 3 (Morning)
 - Breakfast and checkout.
-
 - Hike to Khamsum Yulley Namgyal
-
 - Rafting.
-
 - Lunch.
-
-
 
 Day 3 (Afternoon)
 - Visit Punakha Dzong.
-
 - Roam around Lobesa Market place
-
--Travel for Night stay in Gangtey.
-
+- Travel for Night stay in Gangtey.
 
 Day 4 (Morning)
 - Breakfast and Checkout.
-
 - Visit Gangtey Lhakhang.
-
 - Gangtey Nature Trail.
-
 - Tea break at the trail end.
-
 - Lunch.
-
-
 
 Day 4 (Afternoon)
 - Visit Black-necked Crane Visitor Center.
-
 - Travel towards Thimphu
-
 - Tea break at Druk Wangyel Cafe.
-
 - Night stay in Thimphu.
-
-
 
 Day 5 (Morning)
 - Breakfast.
-
 - Visit Simthokha Dzong.
-
 - Visit Buddha Point.
-
 - Visit Memorial Chhorten
-
 - Travel towards the main town for lunch.
-
-
 
 Day 5 (Afternoon)
 - Visit Simply Bhutan for a look into our cultural heritage.
-
 - Visit Changangkha Lhakhang.
-
 - Visit the Takin Preserve.
-
 - Head back to the hotel for your night stay.
-
-
 
 Day 6 (Morning)
 - Breakfast and checkout.
-
 - Travel to Tango base for your hike to Tango Monastery.
-
 - On your way back down have a packed lunch at the base of Cherri mountain.
-
-
-
 
 Day 6 (Aternoon)
 - Travel back towards town and have a short Tea break.
-
 - Roam around the Town for a shopping session.
-
-- Travel towards Tashichoedzong  towards the end of the 
-day.
-
+- Travel towards Tashichoedzong  towards the end of the day.
 - Travel towards Paro for your night stay. Relax for day 7.
-
-
 
 Day 7 (Morning)
 - Have a hearty, filling breakfast. (recommended)
-
 - Travel to Taktshang base.
-
 - Hike up to Taktshang.
-
-
 
 Day 7 (Afternoon)
 - Lunch on the way back down the mountain.
-
 - Tea break at town.
-
 - Roam around town. (Optional)
-
 - Travel to your night stay to relax and enjoy the night.
-
-
 
 Day 8 (Morning)
 - Breakfast then checkout and travel to the airport for departure.`
         },
         'gold': {
             id: 'gold',
-            title: 'Gold Package',
-            tag: 'gold',
+            title: 'The Gold Essential (4-Day Signature)',
+            tag: 'Essential Experience',
             imgUrl: 'https://images.unsplash.com/photo-1549488344-32e67c87c244?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80',
             color: 'text-orange-300', // Standard gold color
-            tagline: 'Journey Through Untouched Himalayan Splendor. Connect With Bhutan\'s Living Wisdom. Savor Tranquility, Culture, and Adventure.',
+            tagline: 'Journey Through Untouched Himalayan Splendor. Savor Tranquility, Culture, and the Tiger\'s Nest Trek.',
             duration: '4 Days / 3 Nights',
             price: 'Starting at $7,500 per person',
             cardDescription: 'The essential 4-day Bhutan experience, perfectly blending cultural immersion in Thimphu with the unforgettable Tiger\'s Nest trek.',
@@ -656,4 +559,305 @@ Day 3 (Afternoon)
 - Roam around town. (Optional)
 - Travel to your night stay to relax and enjoy the night.
 
-Day 4 (
+Day 4 (Morning)
+- Breakfast then checkout and travel to the airport for departure.`
+        }
+    };
+
+    // --- PAGE TEMPLATES ---
+
+    function getHomePage() {
+        return `
+            <!-- Home Section: Dynamic Full-Screen Hero -->
+            <section id="home-view" class="relative overflow-hidden min-h-screen pt-12 flex items-center justify-center">
+                <!-- Background Image & Overlay -->
+                <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1517400508197-d861d8a4f91e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80');">
+                    <div class="absolute inset-0 bg-black opacity-40"></div>
+                </div>
+
+                <!-- Hero Content -->
+                <div class="relative z-10 max-w-5xl mx-auto text-center p-8 hero-overlay">
+                    <p class="text-xl sm:text-2xl font-light mb-4 uppercase tracking-widest text-green-300">
+                        The Himalayan Kingdom
+                    </p>
+                    <h1 class="text-6xl sm:text-8xl font-black mb-6 text-white hero-text-shadow">
+                        Bhutan: The Land of Gross National Happiness
+                    </h1>
+                    <p class="text-lg sm:text-3xl text-gray-200 mb-10 max-w-4xl mx-auto font-serif">
+                        Where breathtaking mountain landscapes meet profound spiritual and cultural depth. Discover a journey curated specifically for tranquility and enrichment.
+                    </p>
+                    <button onclick="navigate('plans')" class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold text-xl py-4 px-12 rounded-full shadow-2xl transition duration-300 transform hover:scale-105 tracking-wider">
+                        Explore Our Bespoke Journeys
+                    </button>
+                </div>
+            </section>
+        `;
+    }
+
+    function getPlansPage() {
+        let cards = '';
+        for (const key in packagesData) {
+            const pkg = packagesData[key];
+            cards += `
+                <!-- Travel Card: ${pkg.title} -->
+                <div class="travel-card bg-[#111] p-6 rounded-2xl shadow-lg border border-gray-800 flex flex-col hover:border-green-600/50">
+                    <div class="relative overflow-hidden rounded-xl h-48 mb-6">
+                        <img src="${pkg.imgUrl}" alt="Scenery for ${pkg.title}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-[1.05]" onerror="this.onerror=null; this.src='https://placehold.co/800x400/1e293b/ffffff?text=Bhutan+Placeholder'">
+                        <span class="absolute top-3 right-3 text-xs font-bold px-3 py-1 rounded-full ${pkg.color} bg-black/70 backdrop-blur-sm shadow-md">${pkg.tag}</span>
+                    </div>
+                    <h3 class="text-3xl font-bold ${pkg.color} mb-3">${pkg.title.split(' (')[0]}</h3>
+                    <p class="text-sm uppercase tracking-widest text-gray-400 mb-4">${pkg.duration}</p>
+                    <p class="text-gray-400 mb-6 flex-grow">${pkg.cardDescription}</p>
+                    <div class="mt-auto">
+                        <p class="text-2xl font-extrabold text-white mb-4">${pkg.price}</p>
+                        <button onclick="navigate('details', '${pkg.id}')" class="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-3 rounded-xl transition duration-300 shadow-lg transform hover:shadow-green-600/40">
+                            View Itinerary
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        return `
+            <!-- Travel Plans Section -->
+            <section id="plans-view" class="max-w-7xl mx-auto px-6 py-12">
+                <div class="text-center mb-16">
+                    <h2 class="text-5xl font-extrabold text-white mb-4">Our Curated Journeys</h2>
+                    <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                        We offer meticulously planned packages designed to immerse you in the culture, nature, and spirituality of Bhutan.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+                    ${cards}
+                </div>
+            </section>
+        `;
+    }
+
+    function getDetailsPage(packageId) {
+        const pkg = packagesData[packageId];
+        if (!pkg) return getNotFoundPage();
+
+        const featuresList = pkg.features.map(f => `
+            <li class="flex items-start text-lg text-gray-300">
+                <svg class="w-6 h-6 mr-3 ${pkg.color} flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                ${f}
+            </li>
+        `).join('');
+
+        const itineraryHtml = formatItinerarySeparated(pkg.itinerary, pkg.color);
+
+        return `
+            <!-- Package Details Section -->
+            <section id="details-view" class="max-w-7xl mx-auto px-6 py-12">
+                <button onclick="navigate('plans')" class="text-lg text-green-400 hover:text-green-300 font-semibold mb-6 flex items-center transition duration-300">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Back to All Plans
+                </button>
+                
+                <header class="relative overflow-hidden rounded-2xl shadow-2xl mb-12">
+                    <img src="${pkg.imgUrl}" alt="${pkg.title}" class="w-full h-80 object-cover" onerror="this.onerror=null; this.src='https://placehold.co/1200x400/1e293b/ffffff?text=Bhutan+Placeholder'">
+                    <div class="absolute inset-0 ${pkg.overlayClass} flex items-end p-8">
+                        <div>
+                            <span class="text-sm font-bold px-3 py-1 rounded-full text-white bg-black/50 backdrop-blur-sm">${pkg.duration}</span>
+                            <h2 class="text-5xl font-extrabold text-white mt-3 mb-2 hero-text-shadow">${pkg.title}</h2>
+                            <p class="text-2xl text-gray-200 font-serif">${pkg.tagline}</p>
+                        </div>
+                    </div>
+                </header>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                    <!-- Features Column -->
+                    <div class="lg:col-span-1 p-6 bg-[#111111] rounded-xl shadow-2xl border border-gray-800 h-fit sticky top-28">
+                        <h3 class="text-3xl font-bold ${pkg.color} mb-6 border-b border-gray-800 pb-2">Key Highlights</h3>
+                        <ul class="space-y-4">
+                            ${featuresList}
+                        </ul>
+                        <div class="mt-8 pt-4 border-t border-gray-800">
+                            <p class="text-xl font-medium text-gray-400 mb-2">Investment</p>
+                            <p class="text-4xl font-black text-white">${pkg.price}</p>
+                            <a href="#contact" onclick="navigate('contact')" class="mt-6 w-full inline-block text-center bg-green-600 hover:bg-green-700 text-white font-semibold py-4 rounded-xl transition duration-300 shadow-xl">
+                                Book This Journey
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Itinerary Column -->
+                    <div class="lg:col-span-2">
+                        <h3 class="text-4xl font-extrabold text-white mb-6 border-b border-gray-800 pb-2">Day-by-Day Itinerary</h3>
+                        ${itineraryHtml}
+                    </div>
+                </div>
+            </section>
+        `;
+    }
+
+    function getContactPage() {
+        return `
+            <!-- Contact Section -->
+            <section id="contact-view" class="max-w-4xl mx-auto px-6 py-16 min-h-[60vh]">
+                <div class="text-center mb-12">
+                    <h2 class="text-5xl font-extrabold text-white mb-4">Plan Your Perfect Escape</h2>
+                    <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                        Get in touch with our travel curators to start designing your personalized journey to Bhutan.
+                    </p>
+                </div>
+
+                <div class="bg-[#111111] p-8 md:p-12 rounded-2xl shadow-2xl border border-green-700/50">
+                    <form onsubmit="handleContactSubmit(event)" class="space-y-6">
+                        <div>
+                            <label for="name" class="block text-lg font-medium text-gray-300 mb-2">Full Name</label>
+                            <input type="text" id="name" name="name" required class="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:ring-green-600 focus:border-green-600 transition duration-300">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-lg font-medium text-gray-300 mb-2">Email Address</label>
+                            <input type="email" id="email" name="email" required class="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:ring-green-600 focus:border-green-600 transition duration-300">
+                        </div>
+                        <div>
+                            <label for="package" class="block text-lg font-medium text-gray-300 mb-2">Interested Package (Optional)</label>
+                            <select id="package" name="package" class="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-xl text-white focus:ring-green-600 focus:border-green-600 transition duration-300 appearance-none">
+                                <option value="">Select a package</option>
+                                <option value="special">The Elevated Horizons Journey (10-Day)</option>
+                                <option value="diamond">The Diamond Experience (6-Day)</option>
+                                <option value="platinum">The Platinum Expedition (8-Day)</option>
+                                <option value="gold">The Gold Essential (4-Day)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="message" class="block text-lg font-medium text-gray-300 mb-2">Your Message / Custom Request</label>
+                            <textarea id="message" name="message" rows="5" required class="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:ring-green-600 focus:border-green-600 transition duration-300"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold text-xl py-4 rounded-xl shadow-lg transition duration-300 transform hover:scale-[1.01]">
+                            Send Inquiry
+                        </button>
+                        <div id="contact-message" class="mt-4 text-center text-green-400 font-semibold hidden"></div>
+                    </form>
+                </div>
+            </section>
+        `;
+    }
+
+    function getNotFoundPage() {
+         return `
+            <section id="not-found-view" class="max-w-4xl mx-auto px-6 py-24 text-center min-h-[60vh]">
+                <h2 class="text-7xl font-black accent-gold mb-4">404</h2>
+                <h3 class="text-3xl font-bold text-white mb-6">Page Not Found</h3>
+                <p class="text-xl text-gray-400 mb-8">
+                    The requested page for this journey could not be located. Perhaps you took a wrong trail.
+                </p>
+                <button onclick="navigate('plans')" class="bg-red-600 hover:bg-red-700 text-white font-semibold text-lg py-3 px-8 rounded-xl shadow-lg transition duration-300 transform hover:scale-105">
+                    Return to Travel Plans
+                </button>
+            </section>
+        `;
+    }
+    
+    // --- JS HANDLERS ---
+
+    function handleContactSubmit(event) {
+        event.preventDefault();
+        const form = event.target;
+        const messageDiv = document.getElementById('contact-message');
+        
+        // Simulate form submission success
+        messageDiv.textContent = `Thank you, ${form.name.value.split(' ')[0]}! Your inquiry has been successfully sent. We will be in touch shortly regarding the ${form.package.options[form.package.selectedIndex].text || 'general inquiry'}.`;
+        messageDiv.classList.remove('hidden');
+        form.reset();
+
+        // Hide success message after 5 seconds
+        setTimeout(() => {
+            messageDiv.classList.add('hidden');
+        }, 5000);
+    }
+
+    function updateActiveNav(activePage) {
+        // Remove 'details' prefix if present for navigation highlighting
+        const navTarget = activePage.startsWith('details') ? 'plans' : activePage;
+        
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('data-page') === navTarget) {
+                link.classList.add('active');
+            }
+        });
+    }
+
+    function renderPage(pageId, dataId) {
+        let content = '';
+        
+        // 1. Get the content based on the pageId
+        if (pageId === 'home') {
+            content = getHomePage();
+        } else if (pageId === 'plans') {
+            content = getPlansPage();
+        } else if (pageId === 'contact') {
+            content = getContactPage();
+        } else if (pageId === 'details') {
+            content = getDetailsPage(dataId);
+        } else {
+            content = getNotFoundPage();
+        }
+
+        // 2. Apply exit transition to current content (if any)
+        contentContainer.classList.add('page-exit-active');
+
+        // 3. Wait for exit transition to finish, then update content and apply entry transition
+        setTimeout(() => {
+            contentContainer.innerHTML = content;
+            contentContainer.classList.remove('page-exit-active');
+            contentContainer.classList.add('page-enter-active');
+            
+            // Clean up entry transition class after it finishes
+            setTimeout(() => {
+                contentContainer.classList.remove('page-enter-active');
+                // Scroll to top when page changes
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 500); 
+
+            // 4. Update URL and Navigation state
+            const hash = dataId ? `#${pageId}/${dataId}` : `#${pageId}`;
+            history.pushState(null, '', hash);
+            updateActiveNav(pageId);
+        }, 300); // Must match page-exit-active transition duration
+    }
+
+    function navigate(pageId, dataId = null) {
+        currentPage = dataId ? `${pageId}-${dataId}` : pageId;
+        renderPage(pageId, dataId);
+    }
+    
+    function handlePopState() {
+        const hash = window.location.hash.substring(1);
+        const parts = hash.split('/');
+        
+        if (parts.length > 0 && parts[0] !== '') {
+            const pageId = parts[0];
+            const dataId = parts[1] || null;
+            if (pageId !== currentPage) {
+                 navigate(pageId, dataId);
+            }
+        } else {
+             navigate('home');
+        }
+    }
+
+    // --- INITIALIZATION ---
+    window.onload = function() {
+        // Set up event listener for back/forward browser buttons
+        window.addEventListener('popstate', handlePopState);
+        
+        // Determine initial page from URL hash
+        const initialHash = window.location.hash.substring(1);
+        if (initialHash) {
+             handlePopState();
+        } else {
+            // Default to home page if no hash is present
+            navigate('home'); 
+        }
+    };
+    
+</script>
+
+</body>
+</html>
