@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>The Orchard Travels | Curated Journeys</title>
-    <!-- Tailwind CSS for utility-first styling --><script src="https://cdn.tailwindcss.com"></script>
+    
+<script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Inter:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     <style>
         /* Custom CSS for fonts and absolute dark theme */
@@ -13,7 +14,7 @@
             background-color: #0c0c0c; /* Deep charcoal */
             color: #f5f5f5; /* Near-white text for ultimate contrast */
         }
-        h1, h2, h3 {
+        h1, h2, h3, h4 {
             font-family: 'Playfair Display', serif;
         }
         /* Rich Gold/Bronze color for professional accent */
@@ -36,7 +37,6 @@
             box-shadow: 0 40px 60px rgba(212, 175, 55, 0.15); /* Gold glow shadow */
         }
         
-        /* ADJUSTMENT: Home page hero overlay is slightly lighter (0.65 opacity) */
         .hero-overlay {
             background-color: rgba(10, 40, 20, 0.65); /* Less dark Forest Green overlay */
             border-radius: 1rem;
@@ -47,6 +47,7 @@
         }
 
         /* --- PAGE TRANSITION CSS FOR SMOOTH SWITCHING --- */
+        /* Note: Page entry/exit animations are now controlled by JS flags */
         .page-exit-active {
             opacity: 0;
             transform: translateY(-20px);
@@ -56,10 +57,6 @@
             opacity: 1;
             transform: translateY(0);
             transition: opacity 0.5s ease-out 0.1s, transform 0.5s ease-out 0.1s; /* Slight delay on enter */
-        }
-        .page-initial {
-            opacity: 0;
-            transform: translateY(20px);
         }
 
         /* Logo styling */
@@ -83,233 +80,580 @@
         </div>
     </nav>
 
-    <!-- MAIN CONTENT CONTAINER (This is where the "pages" will load) --><main id="app-content" class="min-h-screen pt-4 page-initial"></main>
+    <!-- MAIN CONTENT CONTAINER (Removed page-initial class) --><main id="app-content" class="min-h-screen pt-4"></main>
 
     <!-- Footer --><footer class="bg-[#111111] text-gray-500 py-12 mt-20 text-center border-t border-gray-900 shadow-inner">
         <p class="text-base font-light tracking-wider">&copy; 2024 The Orchard Travels. Curating the world's finest, bespoke journeys.</p>
         <div class="mt-4 flex justify-center space-x-6 text-xl">
-             <!-- Updated Social Media Links --><a href="#" class="hover:text-green-500 transition-colors" title="WhatsApp">💬</a>
-             <a href="#" class="hover:text-green-500 transition-colors" title="TikTok">🎶</a>
-             <a href="#" class="hover:text-green-500 transition-colors" title="Instagram">📸</a>
+            <!-- Updated Social Media Links --><a href="#" class="hover:text-green-500 transition-colors" title="WhatsApp">💬</a>
+            <a href="#" class="hover:text-green-500 transition-colors" title="TikTok">🎶</a>
+            <a href="#" class="hover:text-green-500 transition-colors" title="Instagram">📸</a>
         </div>
     </footer>
 
 <script>
-    // --- JAVASCRIPT FOR SINGLE-PAGE APPLICATION ROUTING ---
-    const appContent = document.getElementById('app-content');
-    const navLinks = document.querySelectorAll('.nav-link');
+    // --- UTILITY FUNCTION: FORMAT ITINERARY INTO SEPARATE DAILY CARDS ---
+    function formatItinerarySeparated(rawText, pkgColorClass) {
+        const lines = rawText.split('\n').filter(line => line.trim() !== '');
+        let html = '<div class="space-y-6">'; // Main container for daily cards
+        let currentDayContent = '';
+        let currentDayTitle = '';
 
-    // 1. Home Page Content
-    const getHomePage = () => `
-        <section id="home-page" class="relative bg-cover bg-center h-[95vh] flex items-center justify-center text-white mx-auto max-w-7xl rounded-2xl overflow-hidden shadow-2xl shadow-green-900/40" 
-             style="background-image: url('https://images.unsplash.com/photo-1543884841-8b2b7314d59f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80');">
-            <div class="absolute inset-0 hero-overlay"></div>
-            <div class="relative z-10 text-center p-16 max-w-5xl border border-green-500/50 rounded-lg shadow-2xl backdrop-blur-md">
-                <!-- Professional Title Alignment --><p class="text-2xl font-semibold text-green-400 uppercase tracking-[0.3em] mb-6 hero-text-shadow">Experience The Grandeur</p>
+        const processAndAppendDay = (title, content) => {
+            if (!title || !content) return;
+            
+            // Apply the new, clean card structure for each Day/Section with brighter borders
+            html += `
+                <div class="p-6 rounded-xl shadow-lg border border-green-500/50 bg-[#151515] hover:border-green-400/70 transition duration-300">
+                    <h4 class="text-3xl font-extrabold ${pkgColorClass} mb-4 border-b border-gray-800 pb-2">${title}</h4>
+                    <ul class="space-y-3 pl-0 list-none text-lg">
+                        ${content}
+                    </ul>
+                </div>
+            `;
+        };
+
+        lines.forEach(line => {
+            const trimmedLine = line.trim();
+            
+            // Check for new Day/Section Heading (e.g., Day 1 (Morning) or Day 1 (Afternoon))
+            if (trimmedLine.startsWith('Day') && trimmedLine.includes('(')) {
+                // If we have existing content, close the previous day's card
+                processAndAppendDay(currentDayTitle, currentDayContent);
                 
-                <!-- Combined Title as requested: The Orchard Travels in one line, Bhutan smaller --><h1 class="text-7xl md:text-[6rem] font-black tracking-tighter leading-none text-white hero-text-shadow mb-8">
-                    The Orchard Travels &nbsp;<span class="text-5xl md:text-7xl font-bold accent-gold">Bhutan</span>
-                </h1>
+                // Start the new day/section
+                currentDayTitle = trimmedLine;
+                currentDayContent = '';
+            } else if (trimmedLine.startsWith('-')) {
+                // Process activity line
+                let activity = trimmedLine.substring(1).trim();
+                let marker = '<span class="mr-3 text-green-400 font-bold">•</span>'; // Default bullet
+                let textColor = 'text-gray-300';
                 
-                <!-- Professional Divider --><div class="h-1 bg-green-500 w-40 mx-auto mb-8 opacity-70"></div>
-                <p class="text-3xl mb-12 text-gray-300 font-light italic">
-                    "Crafting unforgettable journeys to the Kingdom of the Thunder Dragon."
-                </p>
-                <a href="#plans" class="bg-green-700 hover:bg-green-800 text-white font-extrabold py-5 px-16 rounded-full text-2xl shadow-xl transition duration-300 ease-in-out transform hover:scale-105 uppercase tracking-widest border border-green-500/50">
-                    View Bhutan Packages
-                </a>
-            </div>
-        </section>
-        
-        <div class="max-w-7xl mx-auto mt-24 p-6">
-            <h2 class="text-6xl font-black text-center text-green-500 mb-6">Our Commitment</h2>
-            <p class="text-xl text-center text-gray-500 mb-20">We deliver peace of mind and unparalleled quality in every detail.</p>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
-                <div class="p-10 bg-[#0d0d0d] rounded-xl shadow-2xl border border-gray-800/80 transition duration-300 hover:shadow-green-900/60">
-                    <div class="text-6xl accent-gold mb-4">👑</div>
-                    <h3 class="text-3xl font-bold text-white mb-2">Unrivaled Luxury</h3>
-                    <p class="text-gray-400 mt-3 text-base">Access to the world's most exclusive resorts and private transport options.</p>
-                </div>
-                <div class="p-10 bg-[#0d0d0d] rounded-xl shadow-2xl border border-gray-800/80 transition duration-300 hover:shadow-green-900/60">
-                    <div class="text-6xl accent-gold mb-4">🏔️</div>
-                    <h3 class="text-3xl font-bold text-white mb-2">Authentic Discovery</h3>
-                    <p class="text-gray-400 mt-3 text-base">Curated cultural programs and off-the-beaten-path expeditions with expert guides.</p>
-                </div>
-                <div class="p-10 bg-[#0d0d0d] rounded-xl shadow-2xl border border-gray-800/80 transition duration-300 hover:shadow-green-900/60">
-                    <div class="text-6xl accent-gold mb-4">🛡️</div>
-                    <h3 class="text-3xl font-bold text-white mb-2">Discreet Service</h3>
-                    <p class="text-gray-400 mt-3 text-base">Your dedicated concierge ensures absolute privacy and flawless execution, globally.</p>
-                </div>
-            </div>
-        </div>
-    `;
+                if (activity.toLowerCase().includes('(optional)')) {
+                    marker = '<span class="mr-3 text-red-400 font-bold">~</span>';
+                    textColor = 'text-gray-400 italic';
+                } else if (activity.toLowerCase().includes('(recommended)')) {
+                    marker = '<span class="mr-3 text-yellow-500 font-bold">*</span>';
+                    textColor = 'text-gray-200 font-medium';
+                }
 
-    // 2. Travel Plans Page Content
-    const getPlansPage = () => `
-        <section id="plans-page" class="py-16 max-w-7xl mx-auto px-6">
-            <h2 class="text-6xl font-black text-center text-green-500 mb-6">Our Exclusive Portfolio</h2>
-            <p class="text-xl text-center text-gray-400 mb-20">Select the tier of service that aligns with your travel vision.</p>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-
-                <!-- Silver Package (Refined Special) -->${createTravelCard('Silver Package', 'Boutique hotel stays and flexible, short European and domestic excursions.', 'https://images.unsplash.com/photo-1542052136-8d5c7017282b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60', 'bg-gray-700/80', 'text-gray-200')}
-                
-                <!-- Diamond Package (Gold Accent) -->${createTravelCard('Diamond Package', 'The zenith of luxury: private charters, exclusive villas, and bespoke dining.', 'https://images.unsplash.com/photo-1520250497591-ab3f2f396435?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60', 'bg-yellow-900/80', 'accent-gold')}
-
-                <!-- Platinum Package (Green Accent) -->${createTravelCard('Platinum Package', 'Comprehensive world tours, professional photography, and complex, multi-destination itineraries.', 'https://images.unsplash.com/photo-1498050108023-c5249f4cd085?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60', 'bg-green-900/80', 'text-green-300')}
-
-                <!-- Imperial Package (Refined Gold) -->${createTravelCard('Imperial Package', 'Family legacies, milestone celebrations, and highly personalized cultural retreats.', 'https://images.unsplash.com/photo-1506197603052-3cc9c3a201bd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=60', 'bg-indigo-900/80', 'text-indigo-300')}
-            </div>
-            <div class="text-center mt-20">
-                <p class="text-2xl text-gray-400 mb-4">Ready to embark on a journey designed for you?</p>
-                <a href="#contact" class="text-2xl font-bold accent-gold hover:text-white transition-colors duration-300 border-b-2 border-green-500 pb-1 uppercase tracking-wider">Request a Confidential Consultation &rarr;</a>
-            </div>
-        </section>
-    `;
-
-    // Function to generate the HTML for a single travel card (for simplicity)
-    function createTravelCard(title, description, imgUrl, overlayClass, accentTextClass) {
-        return `
-            <a href="#" class="travel-card block rounded-xl overflow-hidden shadow-2xl relative group cursor-pointer bg-[#0d0d0d] border border-gray-900">
-                <img src="${imgUrl}" alt="${title}" class="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-700">
-                <div class="absolute inset-0 ${overlayClass} opacity-95 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div class="absolute bottom-0 left-0 p-8 text-white text-left z-10">
-                    <h3 class="text-5xl font-extrabold mb-3 ${accentTextClass}">${title}</h3>
-                    <p class="text-base font-light opacity-90 text-gray-300 leading-relaxed">${description}</p>
-                    <span class="inline-block mt-4 text-sm font-bold tracking-widest uppercase border-b border-green-500/80 ${accentTextClass} hover:border-white">View Details &rarr;</span>
-                </div>
-            </a>
-        `;
-    }
-
-    // 3. Contact Us Page Content
-    const getContactPage = () => `
-        <section id="contact-page" class="py-16 max-w-5xl mx-auto px-6">
-            <h2 class="text-6xl font-black text-center text-green-500 mb-6">Arrange Your Private Consultation</h2>
-            <p class="text-xl text-center text-gray-400 mb-20">Connect directly with our senior travel strategists to begin planning your bespoke itinerary.</p>
-
-            <div class="bg-[#0d0d0d] p-12 rounded-2xl shadow-2xl border border-gray-800/80 text-white transition duration-500 hover:shadow-green-900/60">
-                <form class="space-y-10">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div>
-                            <label for="name" class="block text-lg font-bold text-gray-300 mb-3 uppercase tracking-widest">Full Name</label>
-                            <input type="text" id="name" placeholder="Mr. or Mrs. Traveller" class="w-full p-4 border border-gray-700 bg-gray-900 text-white rounded-lg focus:ring-green-500 focus:border-green-500 transition shadow-inner" required>
-                        </div>
-                        <div>
-                            <label for="email" class="block text-lg font-bold text-gray-300 mb-3 uppercase tracking-widest">Email Address</label>
-                            <input type="email" id="email" placeholder="confidential@mail.com" class="w-full p-4 border border-gray-700 bg-gray-900 text-white rounded-lg focus:ring-green-500 focus:border-green-500 transition shadow-inner" required>
-                        </div>
-                    </div>
-                    <div>
-                        <label for="interest" class="block text-lg font-bold text-gray-300 mb-3 uppercase tracking-widest">Preferred Service Level</label>
-                        <select id="interest" class="w-full p-4 border border-gray-700 bg-gray-900 text-white rounded-lg focus:ring-green-500 focus:border-green-500 transition shadow-inner">
-                            <option class="bg-gray-900 accent-gold">Diamond Package (Ultra-Luxury)</option>
-                            <option class="bg-gray-900">Platinum Package (Comprehensive Tours)</option>
-                            <option class="bg-gray-900">Imperial Package (Family/Milestone)</option>
-                            <option class="bg-gray-900">Silver Package (Boutique Getaway)</option>
-                            <option class="bg-gray-900">General Inquiry</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="message" class="block text-lg font-bold text-gray-300 mb-3 uppercase tracking-widest">Consultation Details</label>
-                        <textarea id="message" rows="6" placeholder="Please mention your desired destination, approximate travel dates, and any specific preferences." class="w-full p-4 border border-gray-700 bg-gray-900 text-white rounded-lg focus:ring-green-500 focus:border-green-500 transition shadow-inner" required></textarea>
-                    </div>
-                    <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-extrabold py-5 rounded-lg shadow-xl transition duration-300 uppercase tracking-[0.2em] text-xl border-b-4 border-green-800">
-                        Submit Confidential Request
-                    </button>
-                    <!-- Small message box instead of alert() --><div id="message-box" class="hidden mt-8 p-4 bg-green-950 text-green-300 rounded-lg font-medium text-center border border-green-700 shadow-lg"></div>
-                </form>
-            </div>
-        </section>
-    `;
-
-    // --- ROUTING LOGIC ---
-
-    // Define the routes mapping hash to content function
-    const routes = {
-        '': getHomePage, // Default route
-        'home': getHomePage,
-        'plans': getPlansPage,
-        'contact': getContactPage
-    };
-
-    // Function to load content based on the URL hash
-    function navigate() {
-        // Get hash (e.g., '#plans') and remove the '#'
-        let hash = window.location.hash.substring(1).toLowerCase() || 'home';
-        const contentFunction = routes[hash] || routes['home'];
-
-        // 1. Start exit transition by adding the exit class
-        appContent.classList.remove('page-enter-active');
-        appContent.classList.add('page-exit-active');
-        
-        // Use a slight delay (300ms) to allow the content to fade out
-        setTimeout(() => {
-            // 2. Load the new content
-            appContent.innerHTML = contentFunction();
-            updateActiveNav(hash);
-
-            // 3. Start enter transition by removing the exit class and adding the enter class
-            appContent.classList.remove('page-exit-active', 'page-initial');
-            appContent.classList.add('page-enter-active');
-
-            // Re-attach form listener
-            if(hash === 'contact') {
-                attachContactFormListener();
-            }
-        }, 300); // Must match the exit transition duration in CSS
-    }
-
-    // Function to update the active class on the navigation links
-    function updateActiveNav(currentHash) {
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            // Check if the link's hash matches the current route
-            if (link.getAttribute('href').substring(1) === currentHash) {
-                link.classList.add('active');
+                currentDayContent += `<li class="${textColor} flex items-start">${marker}${activity}</li>`;
+            } else if (trimmedLine.length > 0) {
+                 // Catch any lines that might not start with '-' but are still content
+                 let marker = '<span class="mr-3 text-green-400 font-bold">•</span>';
+                 let textColor = 'text-gray-300';
+                 currentDayContent += `<li class="${textColor} flex items-start">${marker}${trimmedLine}</li>`;
             }
         });
+
+        // Add the final day's content
+        processAndAppendDay(currentDayTitle, currentDayContent);
+
+        html += '</div>'; // Close main container
+        return html;
     }
 
-    // Function to attach the form submission listener
-    function attachContactFormListener() {
-        const contactForm = document.querySelector('#contact-page form');
-        if(contactForm) {
-            contactForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const msgBox = document.getElementById('message-box');
-                
-                // Simulate success
-                msgBox.innerHTML = 'Thank you. Your request has been received. A senior specialist will contact you shortly.';
-                msgBox.classList.remove('hidden');
-                
-                // Reset form fields
-                this.reset();
-            });
-        }
-    }
 
-    // Event listener for when the URL hash changes (when a link is clicked)
-    window.addEventListener('hashchange', navigate);
+    // --- PACKAGE DATA (Data for Detail Pages) ---
+    const packagesData = {
+        'special': {
+            id: 'special',
+            title: 'Special Package',
+            tag: 'special',
+            imgUrl: 'https://images.unsplash.com/photo-1579290076045-817c76891003?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80',
+            color: 'text-red-400', // Distinct color for limited edition
+            tagline: 'Timeless Kingdom, Living Legends. Elevated Horizons, Enchanted Valleys. Soulful Trails, Joyful Encounters.',
+            duration: '10 Days / 9 Nights',
+            price: 'Starting at $18,000 per person',
+            cardDescription: 'Our most comprehensive journey: a 10-day cultural immersion, including Bumthang, Phobjikha, and the legendary Tiger’s Nest.',
+            overlayClass: 'bg-red-900/80',
+            features: [
+                '10-Day comprehensive cultural expedition across Bhutan.',
+                'Exploration of the Bumthang Valley (Switzerland of the East).',
+                'Phobjikha Valley visit to see the Black-necked Cranes (seasonal).',
+                'Hike to the sacred Taktshang (Tiger’s Nest) Monastery.',
+                'White-water rafting along the Mo Chhu river.'
+            ],
+            itinerary: `Day 1 (Morning)
+- Guest arrival and pick up at Paro Airport.
+- Breakfast. (Optional)
+- Visit Ta Dzong Museum.
+- Travel towards Thimphu.
+- Visit Tamchog Lhakhang. (optional)
+- 10 Minute break at Chuzom.
 
-    // Initial load: Navigate to the correct page when the site loads
-    window.addEventListener('load', () => {
-        // For the very first load, we bypass the exit transition and just trigger the entrance
-        let hash = window.location.hash.substring(1).toLowerCase() || 'home';
-        const contentFunction = routes[hash] || routes['home'];
-        
-        appContent.innerHTML = contentFunction();
-        updateActiveNav(hash);
-        
-        // Immediately start the fade-in effect on initial load
-        appContent.classList.remove('page-initial');
-        appContent.classList.add('page-enter-active');
+Day 1 (Afternoon)
+- Check in at Hotel.
+- Visit Buddha Point.
+- Visit Memorial Chhorten.
+- Night Stay In Thimphu
 
-        if(hash === 'contact') {
-            attachContactFormListener();
-        }
-    });
+Day 2 (Morning)
+- Breakfast and checkout.
+- Travel to Tango base for your hike to Tango Monastery.
+- On your way back down have a packed lunch at the base of Cherri mountain.
 
-</script>
-</body>
-</html>
+Day 2 (Afternoon)
+- Visit Changangkha Lhakhang.
+- Town Sightseeing.
+- Visit Takin Preserve.
+- Travel towards Tashichoedzong towards the end of the day.
+- Head back to hotel for night stay
+
+Day 3 (Morning)
+- Breakfast and checkout.
+- Travel towards Phobjikha.
+- Stop to visit Dochula along the way.
+- Lunch at Punakha
+
+Day 3 (Afternoon)
+- Short tour of local market.
+- Drive towards Gangtey.
+- Visit Gangtey Lhakhang.
+- Souvenir shopping in Gangtey Market.
+- Night stay at Gangtey
+
+Day 4 (Morning)
+- Breakfast and Checkout.
+- Gangtey Nature Trail.
+- Tea break at the end of the trail.
+- Visit Black-necked Crane Visitor Center.
+- Travel towards Bumthang
+
+Day 4 (Afternoon)
+- Lunch along the way.
+- Short stop at Yotongla pass.
+- Night stay at Bumthang.
+
+Day 5 (Morning)
+- Breakfast.
+- Visit Kurjey Lhakhang.
+- Walk towards Jambay Lhakhang.
+- Visit Wanduechhoeling Palace.
+- Lunch.
+
+Day 5 (Afternoon)
+- Visit Jakar Dzong.
+- Visit Kenchosum Lhakhang.
+- Visit Tamshing Lhakhang.
+- Go back to the hotel for Night stay.
+
+Day 6 (Morning)
+- Breakfast and checkout.
+- Drive up to Mebar Tsho.
+- Travel towards Trongsa.
+- Visit Trongsa Ta Dzong.
+- Lunch.
+
+Day 6 (Afternoon)
+- Travel towards Wangdue.
+- Visit Wangdue Phodrang Dzong.
+- Travel towards Punakha.
+- Tea break at Lobesa.
+- Night stay at Hotel.
+
+Day 7 (Morning)
+- Breakfast and checkout.
+- Travel and hike to Khamsum Yulley Namgyal.
+- Rafting along the Mo Chhu river.
+- Go back to the Hotel for dress change and Lunch.
+
+Day 7 (Afternoon)
+- Visit Punakha Dzong.
+- Visit Chimmi Lhakhang.
+- Head Back to the Hotel for night stay.
+
+Day 8 (Morning)
+- Breakfast and Checkout.
+- Travel towards Thimphu.
+- Tea break at Dochula.
+- Visit Simtokha Dzong.
+- Lunch.
+
+Day 8 (Afternoon)
+- Visit Royal Botanical Garden at Babesa.
+- Move towards Paro.
+- Rest at Night stay in preparation for day 9.
+
+Day 9 (Morning)
+- Have a hearty, filling breakfast. (recommended)
+- Travel to Taktshang base.
+- Hike up to Taktshang.
+
+Day 9 (Afternoon)
+- Lunch on the way back down the mountain.
+- Tea break at town.
+- Roam around town. (Optional)
+- Travel to your night stay to relax and enjoy the night
+
+Day 10 (Morning)
+- Breakfast then checkout and travel to the airport for departure.`
+        },
+        'diamond': {
+            id: 'diamond',
+            title: 'Diamond Package',
+            tag: 'diamond',
+            imgUrl: 'https://images.unsplash.com/photo-1520250497591-ab3f2f396435?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80',
+            color: 'accent-gold',
+            tagline: 'Get The Most Valued Experience. With Experienced Guides And Private Transfers. Harmony With Nature\'s Beauty. Curated Unique Bhutanese Experiences.',
+            duration: '6 Days / 5 Nights',
+            price: 'Starting at $12,000 per person',
+            cardDescription: 'The ultimate 6-day luxury tour focusing on exclusive, curated experiences in the valleys of Paro, Thimphu, and Punakha.',
+            overlayClass: 'bg-yellow-900/80',
+            features: [
+                '6-Day high-value experience with top-tier guides and private transfers.',
+                'Visit to the iconic Rinpung Dzong and Kyichu Lhakhang.',
+                'Exclusive white-water rafting adventure on the Mo Chhu river.',
+                'Cultural and market shopping session in Thimphu.',
+                'Hike to the sacred Taktshang (Tiger’s Nest) Monastery.'
+            ],
+            itinerary: `Day 1 (Morning)
+- Guest Arrival And Pick Up At Paro Airport 
+- Breakfast (Optional)
+- Visit Ta Dzong
+- Tea Break (Optional)
+- Visit Rinpung Dzong
+- Lunch
+
+Day 1 (Afternoon)
+- Visit Kyichu Lhakhang
+
+- Travel Towards Thimphu
+- Visit Tamchog Lhakhang.(Optional)
+- 10 Minute Break At Chuzom.
+- Night Stay At Hotel In Thimphu.
+
+Day 2 (Morning)
+- Breakfast and checkout.
+
+-Travel and visit Dochula.
+
+- Visit Druk Wangyel Lhakhang
+
+- Tea break at Druk Wangyel Cafe.
+
+- Move towards Punakha.
+
+- Lunch
+
+
+
+Day 2 (Afternoon)
+- Travel to Chimi Lhakhang.
+
+- Travel to Wandue Phodrang Dzong.
+
+- Have a relaxed dinner and night stay at the hotel
+
+
+
+
+
+Day 3 (Morning)
+- Breakfast and checkout.
+
+- Hike to Khamsum Yulley Namgyal.
+
+- Rafting.
+
+- Travel towards town.
+
+- Lunch.
+
+
+
+
+
+Day 3 (Afternoon)
+
+- Visit Punakha Dzong.
+
+- Travel towards Thimphu.
+
+- Tea break at Druk Wangyel Cafe, Dochula.
+
+- Continue towards Thimphu for your night stay.
+
+
+
+
+Day 4 (Morning)
+- Breakfast and checkout.
+
+- Travel to Memorial Chhorten.
+
+- Travel to Buddha Point.
+
+- Travel to the Takin reserve zoo.
+
+- Travel towards the main town for lunch.
+
+
+
+Day 4 (Afternoon)
+- Roam around the Town for a shopping session.
+
+- Travel towards Tashichoedzong to end the day.
+
+- Travel towards Paro for your night stay. Relax for day 5.
+
+
+
+Day 5 (Morning)
+- Have a hearty, filling breakfast. (recommended)
+
+- Travel to Taktshang base.
+
+- Hike up to Taktshang.
+
+
+
+Day 5 (Afternoon)
+- Lunch on the way back down the mountain.
+
+- Tea break at town.
+
+- Roam around town. (Optional)
+
+- Travel to your night stay to relax and enjoy the night.
+
+
+Day 6 (Morning)
+- Breakfast then checkout and travel to the airport for departure.`
+        },
+        'platinum': {
+            id: 'platinum',
+            title: 'Platinum Package',
+            tag: 'platinum',
+            imgUrl: 'https://images.unsplash.com/photo-1498050108023-c5249f4cd085?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80',
+            color: 'text-green-300',
+            tagline: 'Explore Bhutan\'s Iconic Sacred Experiences. Discover Majestic Dzongs, Stunning Vistas. Marvel At Rare, Graceful Cranes.',
+            duration: '8 Days / 7 Nights',
+            price: 'Starting at $14,000 per person',
+            cardDescription: 'An 8-day journey covering iconic sacred sites and natural wonders, including the serene Gangtey Valley and the Tiger\'s Nest.',
+            overlayClass: 'bg-green-900/80',
+            features: [
+                '8-Day immersive tour covering Western and Central Bhutan.',
+                'Exclusive visit to Gangtey Lhakhang and Nature Trail.',
+                'Visit to the Black-necked Crane Visitor Center.',
+                'Hike to Khamsum Yulley Namgyal and white-water rafting.',
+                'Extensive cultural sightseeing including Simthokha Dzong and Simply Bhutan.'
+            ],
+            itinerary: `Day 1 (Morning)
+- Guest arrival and pick up at Paro Airport.
+- Breakfast. (Optional)
+- Visit Ta Dzong.
+- Tea break. (Optional)
+- Visit Rinpung Dzong
+- Lunch.
+
+Day 1 (Afternoon)
+- Visit Kyichu Lhakhang
+
+- Travel towards Thimphu.
+
+- Visit Tamchog Lhakhang. (optional)
+
+- 10 Minute break at Chuzom.
+
+- Night stay at hotel in Thimphu.
+
+
+
+Day 2 (Morning)
+- Breakfast and checkout.
+
+- Travel and visit Dochula.
+
+- Visit Druk Wangyel Lhakhang
+
+- Tea break at Druk Wangyel Cafe.
+
+- Move towards Punakha.
+
+- Lunch.
+
+
+
+Day 2 (Afternoon)
+- Travel to Chimi Lhakhang.
+
+- Travel to Wandue Phodrang Dzong.
+
+- Have a relaxed dinner and night stay at the hotel
+
+
+
+Day 3 (Morning)
+- Breakfast and checkout.
+
+- Hike to Khamsum Yulley Namgyal
+
+- Rafting.
+
+- Lunch.
+
+
+
+Day 3 (Afternoon)
+- Visit Punakha Dzong.
+
+- Roam around Lobesa Market place
+
+-Travel for Night stay in Gangtey.
+
+
+Day 4 (Morning)
+- Breakfast and Checkout.
+
+- Visit Gangtey Lhakhang.
+
+- Gangtey Nature Trail.
+
+- Tea break at the trail end.
+
+- Lunch.
+
+
+
+Day 4 (Afternoon)
+- Visit Black-necked Crane Visitor Center.
+
+- Travel towards Thimphu
+
+- Tea break at Druk Wangyel Cafe.
+
+- Night stay in Thimphu.
+
+
+
+Day 5 (Morning)
+- Breakfast.
+
+- Visit Simthokha Dzong.
+
+- Visit Buddha Point.
+
+- Visit Memorial Chhorten
+
+- Travel towards the main town for lunch.
+
+
+
+Day 5 (Afternoon)
+- Visit Simply Bhutan for a look into our cultural heritage.
+
+- Visit Changangkha Lhakhang.
+
+- Visit the Takin Preserve.
+
+- Head back to the hotel for your night stay.
+
+
+
+Day 6 (Morning)
+- Breakfast and checkout.
+
+- Travel to Tango base for your hike to Tango Monastery.
+
+- On your way back down have a packed lunch at the base of Cherri mountain.
+
+
+
+
+Day 6 (Aternoon)
+- Travel back towards town and have a short Tea break.
+
+- Roam around the Town for a shopping session.
+
+- Travel towards Tashichoedzong  towards the end of the 
+day.
+
+- Travel towards Paro for your night stay. Relax for day 7.
+
+
+
+Day 7 (Morning)
+- Have a hearty, filling breakfast. (recommended)
+
+- Travel to Taktshang base.
+
+- Hike up to Taktshang.
+
+
+
+Day 7 (Afternoon)
+- Lunch on the way back down the mountain.
+
+- Tea break at town.
+
+- Roam around town. (Optional)
+
+- Travel to your night stay to relax and enjoy the night.
+
+
+
+Day 8 (Morning)
+- Breakfast then checkout and travel to the airport for departure.`
+        },
+        'gold': {
+            id: 'gold',
+            title: 'Gold Package',
+            tag: 'gold',
+            imgUrl: 'https://images.unsplash.com/photo-1549488344-32e67c87c244?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80',
+            color: 'text-orange-300', // Standard gold color
+            tagline: 'Journey Through Untouched Himalayan Splendor. Connect With Bhutan\'s Living Wisdom. Savor Tranquility, Culture, and Adventure.',
+            duration: '4 Days / 3 Nights',
+            price: 'Starting at $7,500 per person',
+            cardDescription: 'The essential 4-day Bhutan experience, perfectly blending cultural immersion in Thimphu with the unforgettable Tiger\'s Nest trek.',
+            overlayClass: 'bg-orange-900/80',
+            features: [
+                '4-Day essential tour of Paro and Thimphu Valleys.',
+                'The mandatory Taktshang (Tiger’s Nest) hike.',
+                'Visit to the iconic Buddha Point and Tashichoedzong.',
+                'Experience the Dochula Pass with views of the Eastern Himalayas.',
+                'Time dedicated for shopping and town sightseeing.'
+            ],
+            itinerary: `Day 1 (Morning)
+- Guest arrival and pick up at Paro Airport.
+- Breakfast. (Optional)
+- Visit Ta Dzong.
+- Tea break. (Optional)
+- Travel towards Thimphu.
+- Visit Tamchog Lhakhang. (optional)
+- 10 Minute break at Chuzom.
+- Lunch At Thimphu.
+
+Day 1 (Afternoon)
+- Visit Buddha Point.
+- Visit Takin Zoo.
+- Visit Tashichoedzong.
+- Night stay at hotel.
+
+Day 2 (Morning)
+- Breakfast and checkout.
+- Travel and visit Dochula.
+- Visit Druk Wangyel Lhakhang.
+- Tea break at Druk Wangyel Cafe.
+- Travel back towards Thimphu.
+- Lunch.
+
+Day 2 (Afternoon)
+- Travel around town for shopping session.
+- Visit Memorial Chhorten.
+- Travel to Paro.
+- Have relaxed dinner and night stay at the hotel in preparation for day 3.
+
+Day 3 (Morning)
+- Have a hearty, filling breakfast. (recommended)
+- Travel to Taktshang base.
+- Hike up to Taktshang.
+
+Day 3 (Afternoon)
+- Lunch on the way back down the mountain.
+- Tea break at town.
+- Roam around town. (Optional)
+- Travel to your night stay to relax and enjoy the night.
+
+Day 4 (
