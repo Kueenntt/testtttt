@@ -12,402 +12,492 @@
 <style>
 
 /* RESET */
-
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
 }
 
 body{
-font-family:"Poppins",sans-serif;
-background:#000;
-color:#fff;
-overflow-x:hidden;
+  font-family:"Poppins",sans-serif;
+  background:#000;
+  color:#fff;
+  overflow-x:hidden;
 }
 
 html{
-scroll-behavior:smooth;
+  scroll-behavior:smooth;
 }
 
 /* COLORS */
-
 :root{
---gold:#d4af37;
+  --gold:#d4af37;
 }
 
 /* NAVBAR */
-
 nav{
-position:fixed;
-top:0;
-width:100%;
-padding:20px 50px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-background:rgba(0,0,0,0.95);
-backdrop-filter:blur(10px);
-z-index:1000;
-border-bottom:1px solid rgba(255,255,255,0.08);
+  position:fixed;
+  top:0;
+  width:100%;
+  padding:20px 50px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:rgba(0,0,0,0.95);
+  backdrop-filter:blur(10px);
+  z-index:1000;
+  border-bottom:1px solid rgba(255,255,255,0.08);
 }
 
 nav h1{
-color:var(--gold);
-font-size:28px;
-cursor:pointer;
+  color:var(--gold);
+  font-size:28px;
+  cursor:pointer;
 }
 
 nav ul{
-display:flex;
-gap:35px;
-list-style:none;
+  display:flex;
+  gap:35px;
+  list-style:none;
 }
 
 nav li{
-cursor:pointer;
-position:relative;
+  cursor:pointer;
+  position:relative;
 }
 
 nav li::after{
-content:"";
-position:absolute;
-bottom:-6px;
-left:0;
-width:0%;
-height:2px;
-background:var(--gold);
-transition:0.3s;
+  content:"";
+  position:absolute;
+  bottom:-6px;
+  left:0;
+  width:0%;
+  height:2px;
+  background:var(--gold);
+  transition:0.3s;
 }
 
 nav li:hover::after{
-width:100%;
+  width:100%;
 }
 
 nav li:hover{
-color:var(--gold);
+  color:var(--gold);
 }
 
 /* PAGE */
-
 .page{
-display:none;
-padding:160px 50px 100px;
-min-height:100vh;
-opacity:0;
-transform:translateY(50px);
-transition:0.6s;
+  display:none;
+  padding:160px 50px 100px;
+  min-height:100vh;
+  opacity:0;
+  transform:translateY(50px);
+  transition:0.6s;
 }
 
 .page.active{
-display:block;
-opacity:1;
-transform:translateY(0);
+  display:block;
+  opacity:1;
+  transform:translateY(0);
 }
 
 .page-title{
-text-align:center;
-color:var(--gold);
-font-size:42px;
-margin-bottom:40px;
+  text-align:center;
+  color:var(--gold);
+  font-size:42px;
+  margin-bottom:40px;
 }
 
-/* HERO (UNCHANGED) */
-
+/* HERO */
 .hero{
-text-align:center;
-padding:220px 50px 100px;
-background:linear-gradient(#111,#000);
+  text-align:center;
+  padding:220px 50px 100px;
+  background:linear-gradient(#111,#000);
+}
+
+/* POP-UP ANIMATION */
+.hero h2,
+.hero h3,
+.hero p{
+  opacity:0;
+  transform:translateY(40px) scale(0.95);
+  animation:popup 0.8s ease forwards;
+}
+
+.hero h2{ animation-delay:0.2s; }
+.hero h3{ animation-delay:0.4s; }
+.hero p{ animation-delay:0.6s; }
+
+@keyframes popup{
+  to{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
 }
 
 .main-title{
-font-size:55px;
-color:var(--gold);
+  font-size:55px;
+  color:var(--gold);
 }
 
 .sub-title{
-font-size:22px;
-letter-spacing:6px;
-color:var(--gold);
+  font-size:22px;
+  letter-spacing:6px;
+  color:var(--gold);
 }
 
 .hero p{
-max-width:800px;
-margin:25px auto;
-color:#ccc;
-font-size:20px;
+  max-width:800px;
+  margin:25px auto;
+  color:#ccc;
+  font-size:20px;
 }
 
 /* PACKAGE GRID */
-
 .plan-buttons{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:40px;
-max-width:1200px;
-margin:auto;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:40px;
+  max-width:1200px;
+  margin:auto;
 }
 
 /* PACKAGE CARD */
-
 .plan-btn{
-
-height:520px;
-border-radius:30px;
-
-position:relative;
-
-overflow:hidden;
-
-cursor:pointer;
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-text-align:center;
-
-padding:40px;
-
-background-size:cover;
-background-position:center;
-
-transition:0.5s;
-
-border:2px solid rgba(255,255,255,0.15);
-
+  height:520px;
+  border-radius:30px;
+  position:relative;
+  overflow:hidden;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:40px;
+  background-size:cover;
+  background-position:center;
+  transition:0.5s;
+  border:2px solid rgba(255,255,255,0.15);
 }
 
-/* IMAGE DARK FILTER */
-
+/* FIXED OVERLAY */
 .plan-btn::before{
-
-content:"";
-
-position:absolute;
-
-top:0;
-left:0;
-
-width:100%;
-height:100%;
-
-background:linear-gradient(
-to bottom,
-rgba(0,0,0,0.5),
-rgba(0,0,0,0.75)
-);
-
-z-index:1;
-
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:30px;
+  background:linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.5),
+    rgba(0,0,0,0.75)
+  );
+  z-index:1;
 }
 
 /* TEXT */
-
 .plan-content{
-position:relative;
-z-index:2;
-max-width:240px;
+  position:relative;
+  z-index:2;
+  max-width:240px;
 }
 
 .plan-content h3{
-font-size:32px;
-color:var(--gold);
-margin-bottom:8px;
+  font-size:32px;
+  color:var(--gold);
+  margin-bottom:8px;
 }
 
 .plan-content p{
-font-size:15px;
-color:#ddd;
+  font-size:15px;
+  color:#ddd;
 }
 
-/* HOVER EFFECT */
-
+/* HOVER */
 .plan-btn:hover{
-transform:scale(1.06);
-box-shadow:0 30px 70px rgba(212,175,55,0.4);
+  transform:scale(1.06);
+  box-shadow:0 30px 70px rgba(212,175,55,0.4);
 }
 
 /* ABOUT */
-
 #about p{
-max-width:900px;
-margin:auto;
-text-align:center;
-font-size:20px;
-color:#ccc;
+  max-width:900px;
+  margin:auto;
+  text-align:center;
+  font-size:20px;
+  color:#ccc;
 }
 
 /* FOOTER */
-
 footer{
-padding:50px;
-background:#111;
-text-align:center;
+  padding:50px;
+  background:#111;
+  text-align:center;
 }
 
 footer h3{
-color:var(--gold);
-margin-bottom:10px;
+  color:var(--gold);
+  margin-bottom:10px;
 }
 
 footer p{
-color:#ccc;
+  color:#ccc;
+}
+
+/* DAY-BY-DAY PACKAGE STYLE */
+.day-section{
+  display:flex;
+  gap:40px;
+  align-items:stretch; /* MATCH HEIGHT */
+  margin-bottom:80px;
+  flex-wrap:wrap;
+}
+
+.day-content{
+  flex:1;
+  min-width:280px;
+  color:#ccc;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:20px;
+  background: rgba(0,0,0,0.5); /* overlay look */
+  border-radius:20px;
+}
+
+.day-content h3{
+  color:var(--gold);
+  margin-bottom:10px;
+}
+
+.day-content ul{
+  line-height:1.8;
+}
+
+.day-image{
+  flex:1;
+  min-width:280px;
+}
+
+.day-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:20px;
+  display:block;
+}
+
+.back-button{
+  text-align:center;
+  margin-top:20px;
+}
+
+.back-button button{
+  padding:12px 25px;
+  background:#d4af37;
+  border:none;
+  border-radius:20px;
+  cursor:pointer;
+}
+
+@media(max-width:900px){
+  .day-section{
+    flex-direction:column;
+  }
 }
 
 </style>
 
 </head>
-
 <body>
 
 <!-- NAVBAR -->
-
 <nav>
-
 <h1 onclick="switchPage('home')">The Orchard Travels</h1>
-
 <ul>
 <li onclick="switchPage('home')">Home</li>
 <li onclick="switchPage('plans')">Travel Plans</li>
 <li onclick="switchPage('about')">About Us</li>
 </ul>
-
 </nav>
 
 <!-- HOME -->
-
 <div id="home" class="page active">
-
-<div class="hero">
-
-<h2 class="main-title">The Orchard Travels</h2>
-
-<h3 class="sub-title">BHUTAN</h3>
-
-<p>
-Curated journeys through sacred valleys, timeless monasteries, and breathtaking Himalayan landscapes.
-</p>
-
-</div>
-
+  <div class="hero">
+    <h2 class="main-title">The Orchard Travels</h2>
+    <h3 class="sub-title">BHUTAN</h3>
+    <p>
+      Curated journeys through sacred valleys, timeless monasteries, and breathtaking Himalayan landscapes.
+    </p>
+  </div>
 </div>
 
 <!-- TRAVEL PLANS -->
-
 <div id="plans" class="page">
+  <h2 class="page-title">Travel Plans</h2>
 
-<h2 class="page-title">Travel Plans</h2>
+  <div class="plan-buttons">
+    <div class="plan-btn" onclick="switchPage('special')" style="background-image:url('https://i.pinimg.com/1200x/74/34/0c/74340c3e837929f8ada8a94502accd55.jpg');">
+      <div class="plan-content">
+        <h3>Special</h3>
+        <p>Culture. Calm. Himalayan magic.</p>
+      </div>
+    </div>
 
-<div class="plan-buttons">
+    <div class="plan-btn" onclick="switchPage('diamond')" style="background-image:url('https://i.pinimg.com/736x/69/b6/1e/69b61e8509638b5ec45eabbb35ce6201.jpg');">
+      <div class="plan-content">
+        <h3>Diamond</h3>
+        <p>Premium stays. Exclusive journeys.</p>
+      </div>
+    </div>
 
-<div class="plan-btn"
-onclick="switchPage('special')"
-style="background-image:url('https://i.pinimg.com/1200x/74/34/0c/74340c3e837929f8ada8a94502accd55.jpg');">
+    <div class="plan-btn" onclick="switchPage('platinum')" style="background-image:url('https://i.pinimg.com/736x/14/d8/80/14d880735083181fca78be0fa42e318e.jpg');">
+      <div class="plan-content">
+        <h3>Platinum</h3>
+        <p>Ultimate luxury. Tailored adventure.</p>
+      </div>
+    </div>
 
-<div class="plan-content">
-<h3>Special</h3>
-<p>Culture. Calm. Himalayan magic.</p>
-</div>
-
-</div>
-
-<div class="plan-btn"
-onclick="switchPage('diamond')"
-style="background-image:url('https://i.pinimg.com/736x/69/b6/1e/69b61e8509638b5ec45eabbb35ce6201.jpg');">
-
-<div class="plan-content">
-<h3>Diamond</h3>
-<p>Premium stays. Exclusive journeys.</p>
-</div>
-
-</div>
-
-<div class="plan-btn"
-onclick="switchPage('platinum')"
-style="background-image:url('https://i.pinimg.com/736x/14/d8/80/14d880735083181fca78be0fa42e318e.jpg');">
-
-<div class="plan-content">
-<h3>Platinum</h3>
-<p>Ultimate luxury. Tailored adventure.</p>
-</div>
-
-</div>
-
-<div class="plan-btn"
-onclick="switchPage('gold')"
-style="background-image:url('https://i.pinimg.com/736x/fa/8a/ae/fa8aae1c9754530fd5df24e1b8186dd3.jpg');">
-
-<div class="plan-content">
-<h3>Gold</h3>
-<p>Comfort. Culture. Scenic discovery.</p>
-</div>
-
-</div>
-
-</div>
-
+    <div class="plan-btn" onclick="switchPage('gold')" style="background-image:url('https://i.pinimg.com/736x/fa/8a/ae/fa8aae1c9754530fd5df24e1b8186dd3.jpg');">
+      <div class="plan-content">
+        <h3>Gold</h3>
+        <p>Comfort. Culture. Scenic discovery.</p>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- ABOUT -->
-
 <div id="about" class="page">
+  <h2 class="page-title">About Us</h2>
+  <p>
+    The Orchard Travels offers curated Bhutan journeys blending luxury, culture, and adventure through the Himalayan kingdom.
+  </p>
+</div>
 
-<h2 class="page-title">About Us</h2>
+<!-- SPECIAL PLAN MULTI-DAY -->
+<div id="special" class="page">
+  <h2 class="page-title">Special Plan - 5 Days</h2>
 
-<p>
-The Orchard Travels offers curated Bhutan journeys blending luxury, culture, and adventure through the Himalayan kingdom.
-</p>
+  <!-- DAY 1 -->
+  <div class="day-section">
+    <div class="day-content">
+      <h3>Day 1: Arrival & Thimphu</h3>
+      <ul>
+        <li>Arrival at Paro Airport</li>
+        <li>Drive to Thimphu</li>
+        <li>Check-in to hotel</li>
+        <li>Evening walk in Thimphu city</li>
+      </ul>
+    </div>
+    <div class="day-image">
+      <img src="https://i.pinimg.com/736x/fa/8a/ae/fa8aae1c9754530fd5df24e1b8186dd3.jpg" alt="Day 1">
+    </div>
+  </div>
 
+  <!-- DAY 2 -->
+  <div class="day-section">
+    <div class="day-content">
+      <h3>Day 2: Thimphu Sightseeing</h3>
+      <ul>
+        <li>Visit Buddha Dordenma Statue</li>
+        <li>National Memorial Chorten</li>
+        <li>Folk Heritage Museum</li>
+        <li>Local market exploration</li>
+      </ul>
+    </div>
+    <div class="day-image">
+      <img src="https://i.pinimg.com/736x/69/b6/1e/69b61e8509638b5ec45eabbb35ce6201.jpg" alt="Day 2">
+    </div>
+  </div>
+
+  <!-- DAY 3 -->
+  <div class="day-section">
+    <div class="day-content">
+      <h3>Day 3: Punakha Valley</h3>
+      <ul>
+        <li>Drive to Punakha</li>
+        <li>Visit Punakha Dzong</li>
+        <li>Walk along Punakha Suspension Bridge</li>
+        <li>Overnight in Punakha</li>
+      </ul>
+    </div>
+    <div class="day-image">
+      <img src="https://i.pinimg.com/736x/14/d8/80/14d880735083181fca78be0fa42e318e.jpg" alt="Day 3">
+    </div>
+  </div>
+
+  <!-- DAY 4 -->
+  <div class="day-section">
+    <div class="day-content">
+      <h3>Day 4: Scenic Hike</h3>
+      <ul>
+        <li>Morning hike in valley</li>
+        <li>Visit local village</li>
+        <li>Cultural interaction with locals</li>
+        <li>Return to hotel</li>
+      </ul>
+    </div>
+    <div class="day-image">
+      <img src="https://i.pinimg.com/1200x/74/34/0c/74340c3e837929f8ada8a94502accd55.jpg" alt="Day 4">
+    </div>
+  </div>
+
+  <!-- DAY 5 -->
+  <div class="day-section">
+    <div class="day-content">
+      <h3>Day 5: Departure</h3>
+      <ul>
+        <li>Morning free time for shopping</li>
+        <li>Drive to Paro Airport</li>
+        <li>Departure flight</li>
+      </ul>
+    </div>
+    <div class="day-image">
+      <img src="https://i.pinimg.com/736x/69/b6/1e/69b61e8509638b5ec45eabbb35ce6201.jpg" alt="Day 5">
+    </div>
+  </div>
+
+  <div class="back-button">
+    <button onclick="switchPage('plans')">← Back to Plans</button>
+  </div>
 </div>
 
 <!-- FOOTER -->
-
 <footer>
-
-<h3>Contact Us</h3>
-
-<p>Phone: +975 12345678</p>
-<p>Email: orchardtravels@gmail.com</p>
-<p>Location: Thimphu, Bhutan</p>
-
+  <h3>Contact Us</h3>
+  <p>Phone: +975 12345678</p>
+  <p>Email: orchardtravels@gmail.com</p>
+  <p>Location: Thimphu, Bhutan</p>
 </footer>
 
 <script>
-
 let currentPage = document.querySelector('.page.active');
 
 function switchPage(id){
+  if(currentPage.id === id) return;
 
-if(currentPage.id === id) return;
+  currentPage.style.opacity = 0;
+  currentPage.style.transform = "translateY(50px)";
 
-currentPage.style.opacity = 0;
-currentPage.style.transform = "translateY(50px)";
+  setTimeout(()=>{
+    currentPage.classList.remove('active');
 
-setTimeout(()=>{
+    const nextPage = document.getElementById(id);
 
-currentPage.classList.remove('active');
+    nextPage.classList.add('active');
 
-const nextPage = document.getElementById(id);
+    nextPage.style.opacity = 0;
+    nextPage.style.transform = "translateY(50px)";
 
-nextPage.classList.add('active');
+    setTimeout(()=>{
+      nextPage.style.opacity = 1;
+      nextPage.style.transform = "translateY(0)";
+    },50);
 
-nextPage.style.opacity = 0;
-nextPage.style.transform = "translateY(50px)";
+    currentPage = nextPage;
 
-setTimeout(()=>{
-
-nextPage.style.opacity = 1;
-nextPage.style.transform = "translateY(0)";
-
-},50);
-
-currentPage = nextPage;
-
-},400);
-
+  },400);
 }
-
 </script>
 
 </body>
